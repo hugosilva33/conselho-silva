@@ -5,11 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>Conselho Silva de Performance</title>
 <meta name="theme-color" content="#14120F" />
+<meta name="mobile-web-app-capable" content="yes" />
 <link rel="manifest" href="./manifest.json" />
 <link rel="icon" href="./icon-192.png" />
 <link rel="apple-touch-icon" href="./icon-192.png" />
-<meta name="apple-mobile-web-app-capable" content="yes" />
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,26 +16,21 @@
 
 <style>
   * { box-sizing: border-box; }
-  html, body { margin: 0; padding: 0; background: #14120F; font-family: 'IBM Plex Sans', sans-serif; }
+  html, body { margin: 0; padding: 0; background: #14120F; font-family: 'IBM Plex Sans', sans-serif; color: #EDE7DD; }
   input::placeholder { color: #8C8478; opacity: 0.6; }
   input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
   #root { min-height: 100vh; }
+  button { cursor: pointer; }
 </style>
 
 <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
 <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 </head>
 <body>
 <div id="root"></div>
 
-<script type="text/babel" data-presets="react">
-const { useState, useEffect, useMemo, useCallback } = React;
-
-/* ---------------------------------------------------------
-   CONSELHO SILVA DE PERFORMANCE — versão standalone (PWA)
-   Dados salvos localmente no navegador do aparelho (localStorage)
---------------------------------------------------------- */
+<script>
+const { useState, useEffect, useMemo, useCallback, createElement: h } = React;
 
 const COLORS = {
   bg: "#14120F",
@@ -93,12 +87,10 @@ const DAYS = [
 const STORAGE_KEY = "conselho-silva-data";
 const todayISO = () => new Date().toISOString().slice(0, 10);
 const fmtDate = (iso) => { const [y, m, d] = iso.split("-"); return `${d}/${m}`; };
-
 function emptyData() { return { sessions: {}, bodyweight: [] }; }
 
 function useAppData() {
   const [data, setData] = useState(null);
-
   useEffect(() => {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
@@ -154,67 +146,81 @@ const STATUS_META = {
 function Stamp({ statusKey }) {
   const meta = STATUS_META[statusKey];
   if (!meta) return null;
-  return (
-    <div style={{
+  return h("div", {
+    style: {
       display: "inline-block", padding: "4px 8px", border: `1px solid ${meta.color}`, borderRadius: "4px",
       color: meta.color, transform: "rotate(-2deg)", fontFamily: "'Oswald', sans-serif", fontSize: "11px",
       letterSpacing: "0.08em", textTransform: "uppercase", fontWeight: 600,
-    }}>{meta.label}</div>
-  );
+    }
+  }, meta.label);
 }
 
 function RirPicker({ value, onChange }) {
   const options = ["0", "1", "2", "3+"];
-  return (
-    <div style={{ display: "flex", gap: "4px" }}>
-      {options.map((o) => (
-        <button key={o} onClick={() => onChange(o)} style={{
-          borderRadius: "4px", padding: "4px 8px", fontSize: "12px", fontFamily: "'IBM Plex Mono', monospace",
-          background: value === o ? COLORS.accent : "transparent", color: value === o ? COLORS.bg : COLORS.textMuted,
-          border: `1px solid ${value === o ? COLORS.accent : COLORS.border}`,
-        }}>{o}</button>
-      ))}
-    </div>
+  return h("div", { style: { display: "flex", gap: "4px" } },
+    options.map((o) => h("button", {
+      key: o,
+      type: "button",
+      onClick: () => onChange(o),
+      style: {
+        borderRadius: "4px", padding: "4px 8px", fontSize: "12px", fontFamily: "'IBM Plex Mono', monospace",
+        background: value === o ? COLORS.accent : "transparent", color: value === o ? COLORS.bg : COLORS.textMuted,
+        border: `1px solid ${value === o ? COLORS.accent : COLORS.border}`,
+      }
+    }, o))
   );
 }
 
 function ExerciseCard({ exercise, prevLog, setValue, current, savedStatus }) {
-  return (
-    <div style={{ borderRadius: "8px", padding: "12px", marginBottom: "12px", background: COLORS.surface, border: `1px solid ${COLORS.border}` }}>
-      <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: "4px" }}>
-        <div>
-          <div style={{ fontFamily: "'Oswald', sans-serif", color: COLORS.text, fontSize: "16px", letterSpacing: "0.02em" }}>
-            {exercise.name.toUpperCase()}
-          </div>
-          <div style={{ color: COLORS.textMuted, fontSize: "11px" }}>Faixa alvo: {exercise.repRange} reps</div>
-        </div>
-        {savedStatus && <Stamp statusKey={savedStatus} />}
-      </div>
-
-      {prevLog ? (
-        <div style={{ marginBottom: "8px", fontSize: "12px", color: COLORS.textMuted, fontFamily: "'IBM Plex Mono', monospace" }}>
-          Última vez ({fmtDate(prevLog.date)}): {prevLog.exercise.sets.map((s) => `${s.weight || 0}kg×${s.reps || 0}`).join(" · ")}
-        </div>
-      ) : (
-        <div style={{ marginBottom: "8px", fontSize: "12px", color: COLORS.textMuted }}>Primeira vez registrando este exercício.</div>
-      )}
-
-      <div style={{ display: "grid", gap: "8px" }}>
-        {current.map((set, i) => (
-          <div key={i} style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-            <span style={{ color: COLORS.textMuted, fontSize: "11px", width: "14px" }}>{i + 1}</span>
-            <input type="number" inputMode="decimal" placeholder="kg" value={set.weight}
-              onChange={(e) => setValue(i, "weight", e.target.value)}
-              style={{ borderRadius: "4px", padding: "4px 8px", width: "64px", fontSize: "14px", background: COLORS.surfaceAlt, border: `1px solid ${COLORS.border}`, color: COLORS.text, fontFamily: "'IBM Plex Mono', monospace" }} />
-            <input type="number" inputMode="numeric" placeholder="reps" value={set.reps}
-              onChange={(e) => setValue(i, "reps", e.target.value)}
-              style={{ borderRadius: "4px", padding: "4px 8px", width: "64px", fontSize: "14px", background: COLORS.surfaceAlt, border: `1px solid ${COLORS.border}`, color: COLORS.text, fontFamily: "'IBM Plex Mono', monospace" }} />
-            <RirPicker value={set.rir} onChange={(v) => setValue(i, "rir", v)} />
-          </div>
-        ))}
-      </div>
-    </div>
-  );
+  return h("div", {
+    style: { borderRadius: "8px", padding: "12px", marginBottom: "12px", background: COLORS.surface, border: `1px solid ${COLORS.border}` }
+  }, [
+    h("div", {
+      key: "head",
+      style: { display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: "4px" }
+    }, [
+      h("div", { key: "title-wrap" }, [
+        h("div", { key: "name", style: { fontFamily: "'Oswald', sans-serif", color: COLORS.text, fontSize: "16px", letterSpacing: "0.02em" } }, exercise.name.toUpperCase()),
+        h("div", { key: "range", style: { color: COLORS.textMuted, fontSize: "11px" } }, `Faixa alvo: ${exercise.repRange} reps`)
+      ]),
+      savedStatus ? h(Stamp, { key: "stamp", statusKey: savedStatus }) : null
+    ]),
+    prevLog ? h("div", {
+      key: "prev",
+      style: { marginBottom: "8px", fontSize: "12px", color: COLORS.textMuted, fontFamily: "'IBM Plex Mono', monospace" }
+    }, `Última vez (${fmtDate(prevLog.date)}): ${prevLog.exercise.sets.map((s) => `${s.weight || 0}kg×${s.reps || 0}`).join(" · ")}`)
+    : h("div", {
+      key: "first",
+      style: { marginBottom: "8px", fontSize: "12px", color: COLORS.textMuted }
+    }, "Primeira vez registrando este exercício."),
+    h("div", { key: "sets", style: { display: "grid", gap: "8px" } },
+      current.map((set, i) => h("div", {
+        key: i,
+        style: { display: "flex", alignItems: "center", gap: "8px" }
+      }, [
+        h("span", { key: "num", style: { color: COLORS.textMuted, fontSize: "11px", width: "14px" } }, i + 1),
+        h("input", {
+          key: "w",
+          type: "number",
+          inputMode: "decimal",
+          placeholder: "kg",
+          value: set.weight,
+          onChange: (e) => setValue(i, "weight", e.target.value),
+          style: { borderRadius: "4px", padding: "4px 8px", width: "64px", fontSize: "14px", background: COLORS.surfaceAlt, border: `1px solid ${COLORS.border}`, color: COLORS.text, fontFamily: "'IBM Plex Mono', monospace" }
+        }),
+        h("input", {
+          key: "r",
+          type: "number",
+          inputMode: "numeric",
+          placeholder: "reps",
+          value: set.reps,
+          onChange: (e) => setValue(i, "reps", e.target.value),
+          style: { borderRadius: "4px", padding: "4px 8px", width: "64px", fontSize: "14px", background: COLORS.surfaceAlt, border: `1px solid ${COLORS.border}`, color: COLORS.text, fontFamily: "'IBM Plex Mono', monospace" }
+        }),
+        h(RirPicker, { key: "rir", value: set.rir, onChange: (v) => setValue(i, "rir", v) })
+      ]))
+    )
+  ]);
 }
 
 function TreinoTab({ data, persist }) {
@@ -268,43 +274,45 @@ function TreinoTab({ data, persist }) {
     persist({ ...data, sessions: nextSessions });
   };
 
-  return (
-    <div style={{ padding: "16px", paddingBottom: "96px" }}>
-      <div style={{ marginBottom: "16px" }}>
-        <div style={{ color: COLORS.textMuted, fontSize: "12px", fontFamily: "'IBM Plex Mono', monospace" }}>
-          {date.split("-").reverse().join("/")}
-        </div>
-        <div style={{ fontFamily: "'Oswald', sans-serif", color: COLORS.text, fontSize: "32px", letterSpacing: "0.01em", lineHeight: 1 }}>
-          {day.name.toUpperCase()}
-        </div>
-        <div style={{ color: COLORS.accent, fontSize: "13px" }}>{day.label}</div>
-      </div>
-
-      <div style={{ display: "flex", gap: "8px", marginBottom: "16px", overflowX: "auto" }}>
-        {DAYS.map((d, i) => (
-          <button key={i} onClick={() => setDayIndex(i)} style={{
-            borderRadius: "4px", padding: "4px 12px", fontSize: "12px", flexShrink: 0,
-            fontFamily: "'Oswald', sans-serif", letterSpacing: "0.05em",
-            background: i === dayIndex ? COLORS.accent : "transparent",
-            color: i === dayIndex ? COLORS.bg : COLORS.textMuted,
-            border: `1px solid ${i === dayIndex ? COLORS.accent : COLORS.border}`,
-          }}>{d.name.toUpperCase()}</button>
-        ))}
-      </div>
-
-      {day.exercises.map((ex, i) => (
-        <ExerciseCard key={ex.id + i} exercise={ex} prevLog={findPreviousLog(data.sessions, date, ex.id)}
-          current={draft[i].sets} savedStatus={savedStatuses[ex.id]}
-          setValue={(setIdx, field, value) => setValue(i, setIdx, field, value)} />
-      ))}
-
-      <button onClick={handleSave} style={{
+  return h("div", { style: { padding: "16px", paddingBottom: "96px" } }, [
+    h("div", { key: "meta", style: { marginBottom: "16px" } }, [
+      h("div", { key: "d", style: { color: COLORS.textMuted, fontSize: "12px", fontFamily: "'IBM Plex Mono', monospace" } }, date.split("-").reverse().join("/")),
+      h("div", { key: "n", style: { fontFamily: "'Oswald', sans-serif", color: COLORS.text, fontSize: "32px", letterSpacing: "0.01em", lineHeight: 1 } }, day.name.toUpperCase()),
+      h("div", { key: "l", style: { color: COLORS.accent, fontSize: "13px" } }, day.label)
+    ]),
+    h("div", { key: "picker", style: { display: "flex", gap: "8px", marginBottom: "16px", overflowX: "auto" } },
+      DAYS.map((d, i) => h("button", {
+        key: i,
+        type: "button",
+        onClick: () => setDayIndex(i),
+        style: {
+          borderRadius: "4px", padding: "4px 12px", fontSize: "12px", flexShrink: 0,
+          fontFamily: "'Oswald', sans-serif", letterSpacing: "0.05em",
+          background: i === dayIndex ? COLORS.accent : "transparent",
+          color: i === dayIndex ? COLORS.bg : COLORS.textMuted,
+          border: `1px solid ${i === dayIndex ? COLORS.accent : COLORS.border}`,
+        }
+      }, d.name.toUpperCase()))
+    ),
+    day.exercises.map((ex, i) => h(ExerciseCard, {
+      key: ex.id + i,
+      exercise: ex,
+      prevLog: findPreviousLog(data.sessions, date, ex.id),
+      current: draft[i].sets,
+      savedStatus: savedStatuses[ex.id],
+      setValue: (setIdx, field, value) => setValue(i, setIdx, field, value)
+    })),
+    h("button", {
+      key: "save",
+      type: "button",
+      onClick: handleSave,
+      style: {
         width: "100%", borderRadius: "8px", padding: "12px", marginTop: "8px",
         background: COLORS.accent, color: COLORS.bg, fontFamily: "'Oswald', sans-serif",
         fontSize: "15px", letterSpacing: "0.08em", fontWeight: 600, border: "none",
-      }}>SALVAR TREINO DO DIA</button>
-    </div>
-  );
+      }
+    }, "SALVAR TREINO DO DIA")
+  ]);
 }
 
 function Sparkline({ points, color }) {
@@ -319,15 +327,14 @@ function Sparkline({ points, color }) {
     const y = h - pad - ((p.weight - min) / range) * (h - pad * 2);
     return `${x},${y}`;
   });
-  return (
-    <svg viewBox={`0 0 ${w} ${h}`} style={{ width: "100%", height: "160px" }}>
-      <polyline points={coords.join(" ")} fill="none" stroke={color} strokeWidth="2" />
-      {coords.map((c, i) => {
-        const [x, y] = c.split(",");
-        return <circle key={i} cx={x} cy={y} r="2.5" fill={color} />;
-      })}
-    </svg>
-  );
+
+  return h("svg", { viewBox: `0 0 ${w} ${h}`, style: { width: "100%", height: "160px" } }, [
+    h("polyline", { key: "line", points: coords.join(" "), fill: "none", stroke: color, strokeWidth: "2" }),
+    ...coords.map((c, i) => {
+      const [x, y] = c.split(",");
+      return h("circle", { key: i, cx: x, cy: y, r: "2.5", fill: color });
+    })
+  ]);
 }
 
 function ProgressoTab({ data, persist }) {
@@ -346,42 +353,49 @@ function ProgressoTab({ data, persist }) {
   const latest = sorted[sorted.length - 1];
   const startWeight = sorted[0];
 
-  return (
-    <div style={{ padding: "16px", paddingBottom: "96px" }}>
-      <div style={{ fontFamily: "'Oswald', sans-serif", color: COLORS.text, fontSize: "28px", marginBottom: "16px" }}>PROGRESSO</div>
-
-      <div style={{ borderRadius: "8px", padding: "12px", marginBottom: "16px", display: "flex", alignItems: "center", gap: "12px", background: COLORS.surface, border: `1px solid ${COLORS.border}` }}>
-        <input type="number" inputMode="decimal" placeholder="peso hoje (kg)" value={weight} onChange={(e) => setWeight(e.target.value)}
-          style={{ borderRadius: "4px", padding: "8px 12px", flex: 1, fontSize: "14px", background: COLORS.surfaceAlt, border: `1px solid ${COLORS.border}`, color: COLORS.text, fontFamily: "'IBM Plex Mono', monospace" }} />
-        <button onClick={addWeight} style={{ borderRadius: "4px", padding: "8px 16px", fontSize: "14px", background: COLORS.accent, color: COLORS.bg, fontFamily: "'Oswald', sans-serif", letterSpacing: "0.05em", border: "none" }}>REGISTRAR</button>
-      </div>
-
-      {latest && startWeight && (
-        <div style={{ display: "flex", gap: "16px", marginBottom: "16px" }}>
-          <div>
-            <div style={{ color: COLORS.textMuted, fontSize: "11px" }}>ATUAL</div>
-            <div style={{ fontFamily: "'IBM Plex Mono', monospace", color: COLORS.text, fontSize: "22px" }}>{latest.weight}kg</div>
-          </div>
-          <div>
-            <div style={{ color: COLORS.textMuted, fontSize: "11px" }}>VARIAÇÃO NO PERÍODO</div>
-            <div style={{ fontFamily: "'IBM Plex Mono', monospace", color: latest.weight <= startWeight.weight ? COLORS.good : COLORS.bad, fontSize: "22px" }}>
-              {(latest.weight - startWeight.weight).toFixed(1)}kg
-            </div>
-          </div>
-        </div>
-      )}
-
-      {sorted.length > 1 ? (
-        <div style={{ background: COLORS.surface, border: `1px solid ${COLORS.border}`, borderRadius: "8px", padding: "8px" }}>
-          <Sparkline points={sorted} color={COLORS.accent} />
-        </div>
-      ) : (
-        <div style={{ color: COLORS.textMuted, fontSize: "13px" }}>
-          Registre seu peso por alguns dias para ver a tendência aqui. Uma medição isolada não diz nada — o que importa é a curva.
-        </div>
-      )}
-    </div>
-  );
+  return h("div", { style: { padding: "16px", paddingBottom: "96px" } }, [
+    h("div", { key: "title", style: { fontFamily: "'Oswald', sans-serif", color: COLORS.text, fontSize: "28px", marginBottom: "16px" } }, "PROGRESSO"),
+    h("div", {
+      key: "input-row",
+      style: { borderRadius: "8px", padding: "12px", marginBottom: "16px", display: "flex", alignItems: "center", gap: "12px", background: COLORS.surface, border: `1px solid ${COLORS.border}` }
+    }, [
+      h("input", {
+        key: "in",
+        type: "number",
+        inputMode: "decimal",
+        placeholder: "peso hoje (kg)",
+        value: weight,
+        onChange: (e) => setWeight(e.target.value),
+        style: { borderRadius: "4px", padding: "8px 12px", flex: 1, fontSize: "14px", background: COLORS.surfaceAlt, border: `1px solid ${COLORS.border}`, color: COLORS.text, fontFamily: "'IBM Plex Mono', monospace" }
+      }),
+      h("button", {
+        key: "btn",
+        type: "button",
+        onClick: addWeight,
+        style: { borderRadius: "4px", padding: "8px 16px", fontSize: "14px", background: COLORS.accent, color: COLORS.bg, fontFamily: "'Oswald', sans-serif", letterSpacing: "0.05em", border: "none" }
+      }, "REGISTRAR")
+    ]),
+    latest && startWeight ? h("div", {
+      key: "stats",
+      style: { display: "flex", gap: "16px", marginBottom: "16px" }
+    }, [
+      h("div", { key: "cur" }, [
+        h("div", { style: { color: COLORS.textMuted, fontSize: "11px" } }, "ATUAL"),
+        h("div", { style: { fontFamily: "'IBM Plex Mono', monospace", color: COLORS.text, fontSize: "22px" } }, `${latest.weight}kg`)
+      ]),
+      h("div", { key: "var" }, [
+        h("div", { style: { color: COLORS.textMuted, fontSize: "11px" } }, "VARIAÇÃO NO PERÍODO"),
+        h("div", { style: { fontFamily: "'IBM Plex Mono', monospace", color: latest.weight <= startWeight.weight ? COLORS.good : COLORS.bad, fontSize: "22px" } }, `${(latest.weight - startWeight.weight).toFixed(1)}kg`)
+      ])
+    ]) : null,
+    sorted.length > 1 ? h("div", {
+      key: "graph",
+      style: { background: COLORS.surface, border: `1px solid ${COLORS.border}`, borderRadius: "8px", padding: "8px" }
+    }, h(Sparkline, { points: sorted, color: COLORS.accent })) : h("div", {
+      key: "empty",
+      style: { color: COLORS.textMuted, fontSize: "13px" }
+    }, "Registre seu peso por alguns dias para ver a tendência aqui. Uma medição isolada não diz nada — o que importa é a curva.")
+  ]);
 }
 
 function daysAgoISO(n) { const d = new Date(); d.setDate(d.getDate() - n); return d.toISOString().slice(0, 10); }
@@ -430,93 +444,87 @@ function buildWeeklyReview(data) {
 
 function ReviewTab({ data }) {
   const [review, setReview] = useState(null);
-  return (
-    <div style={{ padding: "16px", paddingBottom: "96px" }}>
-      <div style={{ fontFamily: "'Oswald', sans-serif", color: COLORS.text, fontSize: "28px", marginBottom: "4px" }}>REVISÃO SEMANAL</div>
-      <div style={{ color: COLORS.textMuted, fontSize: "12px", marginBottom: "16px" }}>Últimos 7 dias, comparado à semana anterior.</div>
-
-      <button onClick={() => setReview(buildWeeklyReview(data))} style={{
+  return h("div", { style: { padding: "16px", paddingBottom: "96px" } }, [
+    h("div", { key: "title", style: { fontFamily: "'Oswald', sans-serif", color: COLORS.text, fontSize: "28px", marginBottom: "4px" } }, "REVISÃO SEMANAL"),
+    h("div", { key: "sub", style: { color: COLORS.textMuted, fontSize: "12px", marginBottom: "16px" } }, "Últimos 7 dias, comparado à semana anterior."),
+    h("button", {
+      key: "btn",
+      type: "button",
+      onClick: () => setReview(buildWeeklyReview(data)),
+      style: {
         width: "100%", borderRadius: "8px", padding: "12px", marginBottom: "16px",
         background: COLORS.accent, color: COLORS.bg, fontFamily: "'Oswald', sans-serif",
         fontSize: "14px", letterSpacing: "0.06em", fontWeight: 600, border: "none",
-      }}>GERAR REVISÃO</button>
-
-      {review && (
-        <div style={{ display: "grid", gap: "12px" }}>
-          <div style={{ borderRadius: "8px", padding: "12px", background: COLORS.surface, border: `1px solid ${COLORS.border}` }}>
-            <div style={{ fontFamily: "'Oswald', sans-serif", color: COLORS.accent, fontSize: "13px", letterSpacing: "0.06em", marginBottom: "6px" }}>TREINO</div>
-            <div style={{ color: COLORS.text, fontSize: "13px", fontFamily: "'IBM Plex Mono', monospace" }}>{review.sessionsCount} de 6 treinos concluídos</div>
-            {review.progressed.length > 0 && <div style={{ color: COLORS.good, fontSize: "12px", marginTop: "4px" }}>Progrediu: {review.progressed.map(([n]) => n).join(", ")}</div>}
-            {review.maintained.length > 0 && <div style={{ color: COLORS.neutral, fontSize: "12px", marginTop: "4px" }}>Manteve: {review.maintained.map(([n]) => n).join(", ")}</div>}
-            {review.regressed.length > 0 && <div style={{ color: COLORS.bad, fontSize: "12px", marginTop: "4px" }}>Regrediu: {review.regressed.map(([n]) => n).join(", ")}</div>}
-          </div>
-
-          <div style={{ borderRadius: "8px", padding: "12px", background: COLORS.surface, border: `1px solid ${COLORS.border}` }}>
-            <div style={{ fontFamily: "'Oswald', sans-serif", color: COLORS.accent, fontSize: "13px", letterSpacing: "0.06em", marginBottom: "6px" }}>COMPOSIÇÃO CORPORAL</div>
-            <div style={{ color: COLORS.text, fontSize: "13px", fontFamily: "'IBM Plex Mono', monospace" }}>
-              {review.weekAvg !== null ? `Média da semana: ${review.weekAvg.toFixed(1)}kg` : "Sem registros de peso nessa semana"}
-            </div>
-            {review.weightDelta !== null && (
-              <div style={{ color: review.weightDelta <= 0 ? COLORS.good : COLORS.bad, fontSize: "12px", marginTop: "4px" }}>
-                Variação vs. semana anterior: {review.weightDelta > 0 ? "+" : ""}{review.weightDelta.toFixed(1)}kg
-              </div>
-            )}
-          </div>
-
-          <div style={{ borderRadius: "8px", padding: "12px", background: COLORS.surface, border: `1px solid ${COLORS.border}` }}>
-            <div style={{ fontFamily: "'Oswald', sans-serif", color: COLORS.accent, fontSize: "13px", letterSpacing: "0.06em", marginBottom: "6px" }}>DIAGNÓSTICO</div>
-            <div style={{ color: COLORS.text, fontSize: "13px", marginBottom: "4px" }}><span style={{ color: COLORS.good }}>Avanço:</span> {review.mainWin}</div>
-            <div style={{ color: COLORS.text, fontSize: "13px" }}><span style={{ color: COLORS.bad }}>Problema:</span> {review.mainIssue}</div>
-          </div>
-
-          <div style={{ borderRadius: "8px", padding: "12px", background: COLORS.surface, border: `1px solid ${COLORS.border}` }}>
-            <div style={{ fontFamily: "'Oswald', sans-serif", color: COLORS.accent, fontSize: "13px", letterSpacing: "0.06em", marginBottom: "6px" }}>PRÓXIMA SEMANA</div>
-            <ul style={{ color: COLORS.text, fontSize: "13px", paddingLeft: "16px", margin: 0 }}>
-              {review.actions.map((a, i) => <li key={i} style={{ marginBottom: "6px" }}>{a}</li>)}
-            </ul>
-          </div>
-        </div>
-      )}
-    </div>
-  );
+      }
+    }, "GERAR REVISÃO"),
+    review ? h("div", { key: "content", style: { display: "grid", gap: "12px" } }, [
+      h("div", { key: "treino-card", style: { borderRadius: "8px", padding: "12px", background: COLORS.surface, border: `1px solid ${COLORS.border}` } }, [
+        h("div", { style: { fontFamily: "'Oswald', sans-serif", color: COLORS.accent, fontSize: "13px", letterSpacing: "0.06em", marginBottom: "6px" } }, "TREINO"),
+        h("div", { style: { color: COLORS.text, fontSize: "13px", fontFamily: "'IBM Plex Mono', monospace" } }, `${review.sessionsCount} de 6 treinos concluídos`),
+        review.progressed.length > 0 ? h("div", { style: { color: COLORS.good, fontSize: "12px", marginTop: "4px" } }, `Progrediu: ${review.progressed.map(([n]) => n).join(", ")}`) : null,
+        review.maintained.length > 0 ? h("div", { style: { color: COLORS.neutral, fontSize: "12px", marginTop: "4px" } }, `Manteve: ${review.maintained.map(([n]) => n).join(", ")}`) : null,
+        review.regressed.length > 0 ? h("div", { style: { color: COLORS.bad, fontSize: "12px", marginTop: "4px" } }, `Regrediu: ${review.regressed.map(([n]) => n).join(", ")}`) : null,
+      ]),
+      h("div", { key: "comp-card", style: { borderRadius: "8px", padding: "12px", background: COLORS.surface, border: `1px solid ${COLORS.border}` } }, [
+        h("div", { style: { fontFamily: "'Oswald', sans-serif", color: COLORS.accent, fontSize: "13px", letterSpacing: "0.06em", marginBottom: "6px" } }, "COMPOSIÇÃO CORPORAL"),
+        h("div", { style: { color: COLORS.text, fontSize: "13px", fontFamily: "'IBM Plex Mono', monospace" } }, review.weekAvg !== null ? `Média da semana: ${review.weekAvg.toFixed(1)}kg` : "Sem registros de peso nessa semana"),
+        review.weightDelta !== null ? h("div", { style: { color: review.weightDelta <= 0 ? COLORS.good : COLORS.bad, fontSize: "12px", marginTop: "4px" } }, `Variação vs. semana anterior: ${review.weightDelta > 0 ? "+" : ""}${review.weightDelta.toFixed(1)}kg`) : null
+      ]),
+      h("div", { key: "diag-card", style: { borderRadius: "8px", padding: "12px", background: COLORS.surface, border: `1px solid ${COLORS.border}` } }, [
+        h("div", { style: { fontFamily: "'Oswald', sans-serif", color: COLORS.accent, fontSize: "13px", letterSpacing: "0.06em", marginBottom: "6px" } }, "DIAGNÓSTICO"),
+        h("div", { style: { color: COLORS.text, fontSize: "13px", marginBottom: "4px" } }, [h("span", { key: "w-tag", style: { color: COLORS.good } }, "Avanço: "), review.mainWin]),
+        h("div", { style: { color: COLORS.text, fontSize: "13px" } }, [h("span", { key: "i-tag", style: { color: COLORS.bad } }, "Problema: "), review.mainIssue])
+      ]),
+      h("div", { key: "act-card", style: { borderRadius: "8px", padding: "12px", background: COLORS.surface, border: `1px solid ${COLORS.border}` } }, [
+        h("div", { style: { fontFamily: "'Oswald', sans-serif", color: COLORS.accent, fontSize: "13px", letterSpacing: "0.06em", marginBottom: "6px" } }, "PRÓXIMA SEMANA"),
+        h("ul", { style: { color: COLORS.text, fontSize: "13px", paddingLeft: "16px", margin: 0 } },
+          review.actions.map((a, i) => h("li", { key: i, style: { marginBottom: "6px" } }, a))
+        )
+      ])
+    ]) : null
+  ]);
 }
 
 function HistoricoTab({ data }) {
   const dates = Object.keys(data.sessions).sort().reverse();
   const [expanded, setExpanded] = useState(null);
-  return (
-    <div style={{ padding: "16px", paddingBottom: "96px" }}>
-      <div style={{ fontFamily: "'Oswald', sans-serif", color: COLORS.text, fontSize: "28px", marginBottom: "16px" }}>HISTÓRICO</div>
-      {dates.length === 0 && <div style={{ color: COLORS.textMuted, fontSize: "13px" }}>Nenhum treino registrado ainda.</div>}
-      {dates.map((d) => {
-        const s = data.sessions[d];
-        const isOpen = expanded === d;
-        return (
-          <div key={d} style={{ borderRadius: "8px", marginBottom: "8px", overflow: "hidden", background: COLORS.surface, border: `1px solid ${COLORS.border}` }}>
-            <button onClick={() => setExpanded(isOpen ? null : d)} style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px", background: "transparent", border: "none", cursor: "pointer" }}>
-              <div style={{ textAlign: "left" }}>
-                <div style={{ fontFamily: "'Oswald', sans-serif", color: COLORS.text, fontSize: "15px" }}>{s.dayName.toUpperCase()}</div>
-                <div style={{ color: COLORS.textMuted, fontSize: "11px" }}>{fmtDate(d)} · {s.exercises.length} exercícios</div>
-              </div>
-              <span style={{ color: COLORS.textMuted }}>{isOpen ? "−" : "+"}</span>
-            </button>
-            {isOpen && (
-              <div style={{ padding: "0 12px 12px" }}>
-                {s.exercises.map((ex) => (
-                  <div key={ex.id} style={{ marginBottom: "8px" }}>
-                    <div style={{ color: COLORS.text, fontSize: "13px" }}>{ex.name}</div>
-                    <div style={{ color: COLORS.textMuted, fontSize: "12px", fontFamily: "'IBM Plex Mono', monospace" }}>
-                      {ex.sets.map((set) => `${set.weight || 0}kg×${set.reps || 0} (RIR ${set.rir})`).join(" · ")}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        );
-      })}
-    </div>
-  );
+  return h("div", { style: { padding: "16px", paddingBottom: "96px" } }, [
+    h("div", { key: "title", style: { fontFamily: "'Oswald', sans-serif", color: COLORS.text, fontSize: "28px", marginBottom: "16px" } }, "HISTÓRICO"),
+    dates.length === 0 ? h("div", { key: "empty", style: { color: COLORS.textMuted, fontSize: "13px" } }, "Nenhum treino registrado ainda.") : null,
+    ...dates.map((d) => {
+      const s = data.sessions[d];
+      const isOpen = expanded === d;
+      return h("div", {
+        key: d,
+        style: { borderRadius: "8px", marginBottom: "8px", overflow: "hidden", background: COLORS.surface, border: `1px solid ${COLORS.border}` }
+      }, [
+        h("button", {
+          key: "btn",
+          type: "button",
+          onClick: () => setExpanded(isOpen ? null : d),
+          style: { width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px", background: "transparent", border: "none" }
+        }, [
+          h("div", { key: "info", style: { textAlign: "left" } }, [
+            h("div", { key: "name", style: { fontFamily: "'Oswald', sans-serif", color: COLORS.text, fontSize: "15px" } }, s.dayName.toUpperCase()),
+            h("div", { key: "date", style: { color: COLORS.textMuted, fontSize: "11px" } }, `${fmtDate(d)} · ${s.exercises.length} exercícios`)
+          ]),
+          h("span", { key: "toggle", style: { color: COLORS.textMuted } }, isOpen ? "−" : "+")
+        ]),
+        isOpen ? h("div", {
+          key: "content",
+          style: { padding: "0 12px 12px" }
+        }, s.exercises.map((ex) => h("div", {
+          key: ex.id,
+          style: { marginBottom: "8px" }
+        }, [
+          h("div", { key: "name", style: { color: COLORS.text, fontSize: "13px" } }, ex.name),
+          h("div", { key: "sets", style: { color: COLORS.textMuted, fontSize: "12px", fontFamily: "'IBM Plex Mono', monospace" } },
+            ex.sets.map((set) => `${set.weight || 0}kg×${set.reps || 0} (RIR ${set.rir})`).join(" · ")
+          )
+        ]))) : null
+      ]);
+    })
+  ]);
 }
 
 function ConselhoSilva() {
@@ -524,7 +532,9 @@ function ConselhoSilva() {
   const [tab, setTab] = useState("treino");
 
   if (!data) {
-    return <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: COLORS.bg, color: COLORS.textMuted, fontFamily: "'IBM Plex Mono', monospace" }}>carregando...</div>;
+    return h("div", {
+      style: { minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: COLORS.bg, color: COLORS.textMuted, fontFamily: "'IBM Plex Mono', monospace" }
+    }, "carregando...");
   }
 
   const TABS = [
@@ -534,34 +544,36 @@ function ConselhoSilva() {
     { id: "historico", label: "Histórico" },
   ];
 
-  return (
-    <div style={{ minHeight: "100vh", background: COLORS.bg }}>
-      <div style={{ padding: "12px 16px", display: "flex", alignItems: "center", justifyContent: "space-between", borderBottom: `1px solid ${COLORS.border}` }}>
-        <div style={{ fontFamily: "'Oswald', sans-serif", color: COLORS.accent, fontSize: "14px", letterSpacing: "0.1em" }}>CONSELHO SILVA</div>
-        <div style={{ color: COLORS.textMuted, fontSize: "11px", fontFamily: "'IBM Plex Mono', monospace" }}>DE PERFORMANCE</div>
-      </div>
-
-      {tab === "treino" && <TreinoTab data={data} persist={persist} />}
-      {tab === "progresso" && <ProgressoTab data={data} persist={persist} />}
-      {tab === "revisao" && <ReviewTab data={data} />}
-      {tab === "historico" && <HistoricoTab data={data} />}
-
-      <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, display: "flex", background: COLORS.surface, borderTop: `1px solid ${COLORS.border}` }}>
-        {TABS.map((t) => (
-          <button key={t.id} onClick={() => setTab(t.id)} style={{
-            flex: 1, padding: "12px 0", textAlign: "center", background: "transparent", cursor: "pointer",
-            fontFamily: "'Oswald', sans-serif", fontSize: "12px", letterSpacing: "0.08em",
-            color: tab === t.id ? COLORS.accent : COLORS.textMuted,
-            borderTop: tab === t.id ? `2px solid ${COLORS.accent}` : "2px solid transparent", border: "none",
-            borderTopWidth: "2px", borderTopStyle: "solid", borderTopColor: tab === t.id ? COLORS.accent : "transparent",
-          }}>{t.label.toUpperCase()}</button>
-        ))}
-      </div>
-    </div>
-  );
+  return h("div", { style: { minHeight: "100vh", background: COLORS.bg } }, [
+    h("div", {
+      key: "top-bar",
+      style: { padding: "12px 16px", display: "flex", alignItems: "center", justifyContent: "space-between", borderBottom: `1px solid ${COLORS.border}` }
+    }, [
+      h("div", { key: "brand", style: { fontFamily: "'Oswald', sans-serif", color: COLORS.accent, fontSize: "14px", letterSpacing: "0.1em" } }, "CONSELHO SILVA"),
+      h("div", { key: "sub", style: { color: COLORS.textMuted, fontSize: "11px", fontFamily: "'IBM Plex Mono', monospace" } }, "DE PERFORMANCE")
+    ]),
+    tab === "treino" ? h(TreinoTab, { key: "t-treino", data, persist }) : null,
+    tab === "progresso" ? h(ProgressoTab, { key: "t-progresso", data, persist }) : null,
+    tab === "revisao" ? h(ReviewTab, { key: "t-revisao", data }) : null,
+    tab === "historico" ? h(HistoricoTab, { key: "t-historico", data }) : null,
+    h("div", {
+      key: "nav",
+      style: { position: "fixed", bottom: 0, left: 0, right: 0, display: "flex", background: COLORS.surface, borderTop: `1px solid ${COLORS.border}` }
+    }, TABS.map((t) => h("button", {
+      key: t.id,
+      type: "button",
+      onClick: () => setTab(t.id),
+      style: {
+        flex: 1, padding: "12px 0", textAlign: "center", background: "transparent",
+        fontFamily: "'Oswald', sans-serif", fontSize: "12px", letterSpacing: "0.08em",
+        color: tab === t.id ? COLORS.accent : COLORS.textMuted,
+        border: "none", borderTop: tab === t.id ? `2px solid ${COLORS.accent}` : "2px solid transparent",
+      }
+    }, t.label.toUpperCase())))
+  ]);
 }
 
-ReactDOM.createRoot(document.getElementById("root")).render(<ConselhoSilva />);
+ReactDOM.createRoot(document.getElementById("root")).render(h(ConselhoSilva));
 </script>
 
 <script>
