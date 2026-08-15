@@ -19,15 +19,20 @@
   #root { min-height: 100vh; }
 </style>
 
-<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script crossorigin src="https://cdn.jsdelivr.net/npm/react@18.2.0/umd/react.production.min.js"></script>
+<script crossorigin src="https://cdn.jsdelivr.net/npm/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
 </head>
 <body>
 <div id="root"></div>
 
-<script type="text/babel" data-presets="react">
-const { useState, useEffect, useMemo, useCallback } = React;
+<script>
+import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";
+const {
+  useState,
+  useEffect,
+  useMemo,
+  useCallback
+} = React;
 
 /* ---------------------------------------------------------
    CONSELHO SILVA DE PERFORMANCE — versão standalone (PWA)
@@ -44,57 +49,167 @@ const COLORS = {
   accent: "#C9A227",
   good: "#6B8F71",
   bad: "#B3452E",
-  neutral: "#8C8478",
+  neutral: "#8C8478"
 };
-
-const DAYS = [
-  { name: "Push A", label: "Empurrar", exercises: [
-    { id: "supino_maq", name: "Supino máquina", sets: 3, repRange: "8-12" },
-    { id: "desenv_maq", name: "Desenvolvimento máquina", sets: 3, repRange: "8-12" },
-    { id: "elev_lateral", name: "Elevação lateral", sets: 3, repRange: "12-15" },
-    { id: "triceps_corda", name: "Tríceps corda", sets: 3, repRange: "10-12" },
-  ]},
-  { name: "Pull A", label: "Puxar", exercises: [
-    { id: "puxada_frente", name: "Puxada frente (pulley)", sets: 3, repRange: "8-12" },
-    { id: "remada_maq", name: "Remada máquina", sets: 3, repRange: "8-12" },
-    { id: "face_pull", name: "Face pull", sets: 3, repRange: "12-15" },
-    { id: "rosca_direta", name: "Rosca direta", sets: 3, repRange: "10-12" },
-  ]},
-  { name: "Legs A", label: "Pernas · quadríceps", exercises: [
-    { id: "leg_press", name: "Leg press", sets: 3, repRange: "10-12" },
-    { id: "cad_extensora", name: "Cadeira extensora", sets: 3, repRange: "12-15" },
-    { id: "cad_flexora_a", name: "Cadeira flexora", sets: 3, repRange: "10-12" },
-    { id: "panturrilha", name: "Panturrilha", sets: 3, repRange: "12-15" },
-  ]},
-  { name: "Push B", label: "Empurrar", exercises: [
-    { id: "supino_maq", name: "Supino máquina", sets: 3, repRange: "8-12" },
-    { id: "desenv_maq", name: "Desenvolvimento máquina", sets: 3, repRange: "8-12" },
-    { id: "elev_lateral", name: "Elevação lateral", sets: 3, repRange: "12-15" },
-    { id: "triceps_corda", name: "Tríceps corda", sets: 3, repRange: "10-12" },
-  ]},
-  { name: "Pull B", label: "Puxar", exercises: [
-    { id: "puxada_frente", name: "Puxada frente (pulley)", sets: 3, repRange: "8-12" },
-    { id: "remada_maq", name: "Remada máquina", sets: 3, repRange: "8-12" },
-    { id: "face_pull", name: "Face pull", sets: 3, repRange: "12-15" },
-    { id: "rosca_direta", name: "Rosca direta", sets: 3, repRange: "10-12" },
-  ]},
-  { name: "Legs B", label: "Pernas · posterior/glúteo", exercises: [
-    { id: "hip_thrust", name: "Hip thrust", sets: 3, repRange: "10-12" },
-    { id: "stiff", name: "Stiff (halteres)", sets: 3, repRange: "10-12" },
-    { id: "cad_flexora_b", name: "Cadeira flexora", sets: 3, repRange: "10-12" },
-    { id: "abducao", name: "Abdução de quadril", sets: 3, repRange: "12-15" },
-  ]},
-];
-
+const DAYS = [{
+  name: "Push A",
+  label: "Empurrar",
+  exercises: [{
+    id: "supino_maq",
+    name: "Supino máquina",
+    sets: 3,
+    repRange: "8-12"
+  }, {
+    id: "desenv_maq",
+    name: "Desenvolvimento máquina",
+    sets: 3,
+    repRange: "8-12"
+  }, {
+    id: "elev_lateral",
+    name: "Elevação lateral",
+    sets: 3,
+    repRange: "12-15"
+  }, {
+    id: "triceps_corda",
+    name: "Tríceps corda",
+    sets: 3,
+    repRange: "10-12"
+  }]
+}, {
+  name: "Pull A",
+  label: "Puxar",
+  exercises: [{
+    id: "puxada_frente",
+    name: "Puxada frente (pulley)",
+    sets: 3,
+    repRange: "8-12"
+  }, {
+    id: "remada_maq",
+    name: "Remada máquina",
+    sets: 3,
+    repRange: "8-12"
+  }, {
+    id: "face_pull",
+    name: "Face pull",
+    sets: 3,
+    repRange: "12-15"
+  }, {
+    id: "rosca_direta",
+    name: "Rosca direta",
+    sets: 3,
+    repRange: "10-12"
+  }]
+}, {
+  name: "Legs A",
+  label: "Pernas · quadríceps",
+  exercises: [{
+    id: "leg_press",
+    name: "Leg press",
+    sets: 3,
+    repRange: "10-12"
+  }, {
+    id: "cad_extensora",
+    name: "Cadeira extensora",
+    sets: 3,
+    repRange: "12-15"
+  }, {
+    id: "cad_flexora_a",
+    name: "Cadeira flexora",
+    sets: 3,
+    repRange: "10-12"
+  }, {
+    id: "panturrilha",
+    name: "Panturrilha",
+    sets: 3,
+    repRange: "12-15"
+  }]
+}, {
+  name: "Push B",
+  label: "Empurrar",
+  exercises: [{
+    id: "supino_maq",
+    name: "Supino máquina",
+    sets: 3,
+    repRange: "8-12"
+  }, {
+    id: "desenv_maq",
+    name: "Desenvolvimento máquina",
+    sets: 3,
+    repRange: "8-12"
+  }, {
+    id: "elev_lateral",
+    name: "Elevação lateral",
+    sets: 3,
+    repRange: "12-15"
+  }, {
+    id: "triceps_corda",
+    name: "Tríceps corda",
+    sets: 3,
+    repRange: "10-12"
+  }]
+}, {
+  name: "Pull B",
+  label: "Puxar",
+  exercises: [{
+    id: "puxada_frente",
+    name: "Puxada frente (pulley)",
+    sets: 3,
+    repRange: "8-12"
+  }, {
+    id: "remada_maq",
+    name: "Remada máquina",
+    sets: 3,
+    repRange: "8-12"
+  }, {
+    id: "face_pull",
+    name: "Face pull",
+    sets: 3,
+    repRange: "12-15"
+  }, {
+    id: "rosca_direta",
+    name: "Rosca direta",
+    sets: 3,
+    repRange: "10-12"
+  }]
+}, {
+  name: "Legs B",
+  label: "Pernas · posterior/glúteo",
+  exercises: [{
+    id: "hip_thrust",
+    name: "Hip thrust",
+    sets: 3,
+    repRange: "10-12"
+  }, {
+    id: "stiff",
+    name: "Stiff (halteres)",
+    sets: 3,
+    repRange: "10-12"
+  }, {
+    id: "cad_flexora_b",
+    name: "Cadeira flexora",
+    sets: 3,
+    repRange: "10-12"
+  }, {
+    id: "abducao",
+    name: "Abdução de quadril",
+    sets: 3,
+    repRange: "12-15"
+  }]
+}];
 const STORAGE_KEY = "conselho-silva-data";
 const todayISO = () => new Date().toISOString().slice(0, 10);
-const fmtDate = (iso) => { const [y, m, d] = iso.split("-"); return `${d}/${m}`; };
-
-function emptyData() { return { sessions: {}, bodyweight: [] }; }
-
+const fmtDate = iso => {
+  const [y, m, d] = iso.split("-");
+  return `${d}/${m}`;
+};
+function emptyData() {
+  return {
+    sessions: {},
+    bodyweight: []
+  };
+}
 function useAppData() {
   const [data, setData] = useState(null);
-
   useEffect(() => {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
@@ -103,33 +218,36 @@ function useAppData() {
       setData(emptyData());
     }
   }, []);
-
-  const persist = useCallback((next) => {
+  const persist = useCallback(next => {
     setData(next);
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(next)); } catch {}
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+    } catch {}
   }, []);
-
-  return { data, persist };
+  return {
+    data,
+    persist
+  };
 }
-
 function lastDayIndex(sessions) {
   const dates = Object.keys(sessions).sort();
   if (dates.length === 0) return -1;
   return sessions[dates[dates.length - 1]].dayIndex;
 }
-
 function findPreviousLog(sessions, currentDate, exerciseId) {
-  const dates = Object.keys(sessions).filter((d) => d < currentDate).sort().reverse();
+  const dates = Object.keys(sessions).filter(d => d < currentDate).sort().reverse();
   for (const d of dates) {
-    const ex = sessions[d].exercises.find((e) => e.id === exerciseId);
-    if (ex && ex.sets.some((s) => s.weight)) return { date: d, exercise: ex };
+    const ex = sessions[d].exercises.find(e => e.id === exerciseId);
+    if (ex && ex.sets.some(s => s.weight)) return {
+      date: d,
+      exercise: ex
+    };
   }
   return null;
 }
-
 function computeStatus(prevSets, currSets) {
-  const prevWeight = Math.max(...prevSets.map((s) => Number(s.weight) || 0));
-  const currWeight = Math.max(...currSets.map((s) => Number(s.weight) || 0));
+  const prevWeight = Math.max(...prevSets.map(s => Number(s.weight) || 0));
+  const currWeight = Math.max(...currSets.map(s => Number(s.weight) || 0));
   const prevReps = prevSets.reduce((a, s) => a + (Number(s.reps) || 0), 0);
   const currReps = currSets.reduce((a, s) => a + (Number(s.reps) || 0), 0);
   if (currWeight > prevWeight) return "nova_carga";
@@ -138,278 +256,546 @@ function computeStatus(prevSets, currSets) {
   if (currReps === prevReps) return "manteve";
   return "regrediu";
 }
-
 const STATUS_META = {
-  progrediu: { label: "Progrediu", color: COLORS.good },
-  manteve: { label: "Manteve", color: COLORS.neutral },
-  regrediu: { label: "Regrediu", color: COLORS.bad },
-  nova_carga: { label: "Nova carga", color: COLORS.accent },
-  carga_reduzida: { label: "Carga reduzida", color: COLORS.bad },
+  progrediu: {
+    label: "Progrediu",
+    color: COLORS.good
+  },
+  manteve: {
+    label: "Manteve",
+    color: COLORS.neutral
+  },
+  regrediu: {
+    label: "Regrediu",
+    color: COLORS.bad
+  },
+  nova_carga: {
+    label: "Nova carga",
+    color: COLORS.accent
+  },
+  carga_reduzida: {
+    label: "Carga reduzida",
+    color: COLORS.bad
+  }
 };
-
-function Stamp({ statusKey }) {
+function Stamp({
+  statusKey
+}) {
   const meta = STATUS_META[statusKey];
   if (!meta) return null;
-  return (
-    <div style={{
-      display: "inline-block", padding: "4px 8px", border: `1px solid ${meta.color}`, borderRadius: "4px",
-      color: meta.color, transform: "rotate(-2deg)", fontFamily: "'Oswald', sans-serif", fontSize: "11px",
-      letterSpacing: "0.08em", textTransform: "uppercase", fontWeight: 600,
-    }}>{meta.label}</div>
-  );
+  return /*#__PURE__*/_jsxDEV("div", {
+    style: {
+      display: "inline-block",
+      padding: "4px 8px",
+      border: `1px solid ${meta.color}`,
+      borderRadius: "4px",
+      color: meta.color,
+      transform: "rotate(-2deg)",
+      fontFamily: "'Oswald', sans-serif",
+      fontSize: "11px",
+      letterSpacing: "0.08em",
+      textTransform: "uppercase",
+      fontWeight: 600
+    },
+    children: meta.label
+  }, void 0, false);
 }
-
-function RirPicker({ value, onChange }) {
+function RirPicker({
+  value,
+  onChange
+}) {
   const options = ["0", "1", "2", "3+"];
-  return (
-    <div style={{ display: "flex", gap: "4px" }}>
-      {options.map((o) => (
-        <button key={o} onClick={() => onChange(o)} style={{
-          borderRadius: "4px", padding: "4px 8px", fontSize: "12px", fontFamily: "'IBM Plex Mono', monospace",
-          background: value === o ? COLORS.accent : "transparent", color: value === o ? COLORS.bg : COLORS.textMuted,
-          border: `1px solid ${value === o ? COLORS.accent : COLORS.border}`,
-        }}>{o}</button>
-      ))}
-    </div>
-  );
+  return /*#__PURE__*/_jsxDEV("div", {
+    style: {
+      display: "flex",
+      gap: "4px"
+    },
+    children: options.map(o => /*#__PURE__*/_jsxDEV("button", {
+      onClick: () => onChange(o),
+      style: {
+        borderRadius: "4px",
+        padding: "4px 8px",
+        fontSize: "12px",
+        fontFamily: "'IBM Plex Mono', monospace",
+        background: value === o ? COLORS.accent : "transparent",
+        color: value === o ? COLORS.bg : COLORS.textMuted,
+        border: `1px solid ${value === o ? COLORS.accent : COLORS.border}`
+      },
+      children: o
+    }, o, false))
+  }, void 0, false);
 }
-
-function ExerciseCard({ exercise, prevLog, setValue, current, savedStatus }) {
-  return (
-    <div style={{ borderRadius: "8px", padding: "12px", marginBottom: "12px", background: COLORS.surface, border: `1px solid ${COLORS.border}` }}>
-      <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: "4px" }}>
-        <div>
-          <div style={{ fontFamily: "'Oswald', sans-serif", color: COLORS.text, fontSize: "16px", letterSpacing: "0.02em" }}>
-            {exercise.name.toUpperCase()}
-          </div>
-          <div style={{ color: COLORS.textMuted, fontSize: "11px" }}>Faixa alvo: {exercise.repRange} reps</div>
-        </div>
-        {savedStatus && <Stamp statusKey={savedStatus} />}
-      </div>
-
-      {prevLog ? (
-        <div style={{ marginBottom: "8px", fontSize: "12px", color: COLORS.textMuted, fontFamily: "'IBM Plex Mono', monospace" }}>
-          Última vez ({fmtDate(prevLog.date)}): {prevLog.exercise.sets.map((s) => `${s.weight || 0}kg×${s.reps || 0}`).join(" · ")}
-        </div>
-      ) : (
-        <div style={{ marginBottom: "8px", fontSize: "12px", color: COLORS.textMuted }}>Primeira vez registrando este exercício.</div>
-      )}
-
-      <div style={{ display: "grid", gap: "8px" }}>
-        {current.map((set, i) => (
-          <div key={i} style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-            <span style={{ color: COLORS.textMuted, fontSize: "11px", width: "14px" }}>{i + 1}</span>
-            <input type="number" inputMode="decimal" placeholder="kg" value={set.weight}
-              onChange={(e) => setValue(i, "weight", e.target.value)}
-              style={{ borderRadius: "4px", padding: "4px 8px", width: "64px", fontSize: "14px", background: COLORS.surfaceAlt, border: `1px solid ${COLORS.border}`, color: COLORS.text, fontFamily: "'IBM Plex Mono', monospace" }} />
-            <input type="number" inputMode="numeric" placeholder="reps" value={set.reps}
-              onChange={(e) => setValue(i, "reps", e.target.value)}
-              style={{ borderRadius: "4px", padding: "4px 8px", width: "64px", fontSize: "14px", background: COLORS.surfaceAlt, border: `1px solid ${COLORS.border}`, color: COLORS.text, fontFamily: "'IBM Plex Mono', monospace" }} />
-            <RirPicker value={set.rir} onChange={(v) => setValue(i, "rir", v)} />
-          </div>
-        ))}
-      </div>
-    </div>
-  );
+function ExerciseCard({
+  exercise,
+  prevLog,
+  setValue,
+  current,
+  savedStatus
+}) {
+  return /*#__PURE__*/_jsxDEV("div", {
+    style: {
+      borderRadius: "8px",
+      padding: "12px",
+      marginBottom: "12px",
+      background: COLORS.surface,
+      border: `1px solid ${COLORS.border}`
+    },
+    children: [/*#__PURE__*/_jsxDEV("div", {
+      style: {
+        display: "flex",
+        alignItems: "flex-start",
+        justifyContent: "space-between",
+        marginBottom: "4px"
+      },
+      children: [/*#__PURE__*/_jsxDEV("div", {
+        children: [/*#__PURE__*/_jsxDEV("div", {
+          style: {
+            fontFamily: "'Oswald', sans-serif",
+            color: COLORS.text,
+            fontSize: "16px",
+            letterSpacing: "0.02em"
+          },
+          children: exercise.name.toUpperCase()
+        }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
+          style: {
+            color: COLORS.textMuted,
+            fontSize: "11px"
+          },
+          children: ["Faixa alvo: ", exercise.repRange, " reps"]
+        }, void 0, true)]
+      }, void 0, true), savedStatus && /*#__PURE__*/_jsxDEV(Stamp, {
+        statusKey: savedStatus
+      }, void 0, false)]
+    }, void 0, true), prevLog ? /*#__PURE__*/_jsxDEV("div", {
+      style: {
+        marginBottom: "8px",
+        fontSize: "12px",
+        color: COLORS.textMuted,
+        fontFamily: "'IBM Plex Mono', monospace"
+      },
+      children: ["Última vez (", fmtDate(prevLog.date), "): ", prevLog.exercise.sets.map(s => `${s.weight || 0}kg×${s.reps || 0}`).join(" · ")]
+    }, void 0, true) : /*#__PURE__*/_jsxDEV("div", {
+      style: {
+        marginBottom: "8px",
+        fontSize: "12px",
+        color: COLORS.textMuted
+      },
+      children: "Primeira vez registrando este exercício."
+    }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
+      style: {
+        display: "grid",
+        gap: "8px"
+      },
+      children: current.map((set, i) => /*#__PURE__*/_jsxDEV("div", {
+        style: {
+          display: "flex",
+          alignItems: "center",
+          gap: "8px"
+        },
+        children: [/*#__PURE__*/_jsxDEV("span", {
+          style: {
+            color: COLORS.textMuted,
+            fontSize: "11px",
+            width: "14px"
+          },
+          children: i + 1
+        }, void 0, false), /*#__PURE__*/_jsxDEV("input", {
+          type: "number",
+          inputMode: "decimal",
+          placeholder: "kg",
+          value: set.weight,
+          onChange: e => setValue(i, "weight", e.target.value),
+          style: {
+            borderRadius: "4px",
+            padding: "4px 8px",
+            width: "64px",
+            fontSize: "14px",
+            background: COLORS.surfaceAlt,
+            border: `1px solid ${COLORS.border}`,
+            color: COLORS.text,
+            fontFamily: "'IBM Plex Mono', monospace"
+          }
+        }, void 0, false), /*#__PURE__*/_jsxDEV("input", {
+          type: "number",
+          inputMode: "numeric",
+          placeholder: "reps",
+          value: set.reps,
+          onChange: e => setValue(i, "reps", e.target.value),
+          style: {
+            borderRadius: "4px",
+            padding: "4px 8px",
+            width: "64px",
+            fontSize: "14px",
+            background: COLORS.surfaceAlt,
+            border: `1px solid ${COLORS.border}`,
+            color: COLORS.text,
+            fontFamily: "'IBM Plex Mono', monospace"
+          }
+        }, void 0, false), /*#__PURE__*/_jsxDEV(RirPicker, {
+          value: set.rir,
+          onChange: v => setValue(i, "rir", v)
+        }, void 0, false)]
+      }, i, true))
+    }, void 0, false)]
+  }, void 0, true);
 }
-
-function TreinoTab({ data, persist }) {
+function TreinoTab({
+  data,
+  persist
+}) {
   const suggestedIndex = useMemo(() => {
     const li = lastDayIndex(data.sessions);
     return li === -1 ? 0 : (li + 1) % DAYS.length;
   }, [data.sessions]);
-
   const [dayIndex, setDayIndex] = useState(suggestedIndex);
   const day = DAYS[dayIndex];
   const date = todayISO();
-
-  const [draft, setDraft] = useState(() => day.exercises.map((ex) => ({
-    id: ex.id, sets: Array.from({ length: ex.sets }, () => ({ weight: "", reps: "", rir: "2" })),
+  const [draft, setDraft] = useState(() => day.exercises.map(ex => ({
+    id: ex.id,
+    sets: Array.from({
+      length: ex.sets
+    }, () => ({
+      weight: "",
+      reps: "",
+      rir: "2"
+    }))
   })));
   const [savedStatuses, setSavedStatuses] = useState({});
-
   useEffect(() => {
-    setDraft(day.exercises.map((ex) => ({
-      id: ex.id, sets: Array.from({ length: ex.sets }, () => ({ weight: "", reps: "", rir: "2" })),
+    setDraft(day.exercises.map(ex => ({
+      id: ex.id,
+      sets: Array.from({
+        length: ex.sets
+      }, () => ({
+        weight: "",
+        reps: "",
+        rir: "2"
+      }))
     })));
     setSavedStatuses({});
   }, [dayIndex]);
-
   const setValue = (exIdx, setIdx, field, value) => {
-    setDraft((prev) => {
+    setDraft(prev => {
       const next = [...prev];
-      next[exIdx] = { ...next[exIdx], sets: [...next[exIdx].sets] };
-      next[exIdx].sets[setIdx] = { ...next[exIdx].sets[setIdx], [field]: value };
+      next[exIdx] = {
+        ...next[exIdx],
+        sets: [...next[exIdx].sets]
+      };
+      next[exIdx].sets[setIdx] = {
+        ...next[exIdx].sets[setIdx],
+        [field]: value
+      };
       return next;
     });
   };
-
   const handleSave = () => {
     const exercisesToSave = day.exercises.map((ex, i) => ({
-      id: ex.id, name: ex.name, sets: draft[i].sets.filter((s) => s.weight || s.reps),
-    })).filter((ex) => ex.sets.length > 0);
-
+      id: ex.id,
+      name: ex.name,
+      sets: draft[i].sets.filter(s => s.weight || s.reps)
+    })).filter(ex => ex.sets.length > 0);
     if (exercisesToSave.length === 0) return;
-
     const newStatuses = {};
-    const exercisesWithStatus = exercisesToSave.map((ex) => {
+    const exercisesWithStatus = exercisesToSave.map(ex => {
       const prev = findPreviousLog(data.sessions, date, ex.id);
       const st = prev ? computeStatus(prev.exercise.sets, ex.sets) : null;
       if (st) newStatuses[ex.id] = st;
-      return { ...ex, status: st };
+      return {
+        ...ex,
+        status: st
+      };
     });
     setSavedStatuses(newStatuses);
-
-    const nextSessions = { ...data.sessions, [date]: { dayIndex, dayName: day.name, exercises: exercisesWithStatus } };
-    persist({ ...data, sessions: nextSessions });
+    const nextSessions = {
+      ...data.sessions,
+      [date]: {
+        dayIndex,
+        dayName: day.name,
+        exercises: exercisesWithStatus
+      }
+    };
+    persist({
+      ...data,
+      sessions: nextSessions
+    });
   };
-
-  return (
-    <div style={{ padding: "16px", paddingBottom: "96px" }}>
-      <div style={{ marginBottom: "16px" }}>
-        <div style={{ color: COLORS.textMuted, fontSize: "12px", fontFamily: "'IBM Plex Mono', monospace" }}>
-          {date.split("-").reverse().join("/")}
-        </div>
-        <div style={{ fontFamily: "'Oswald', sans-serif", color: COLORS.text, fontSize: "32px", letterSpacing: "0.01em", lineHeight: 1 }}>
-          {day.name.toUpperCase()}
-        </div>
-        <div style={{ color: COLORS.accent, fontSize: "13px" }}>{day.label}</div>
-      </div>
-
-      <div style={{ display: "flex", gap: "8px", marginBottom: "16px", overflowX: "auto" }}>
-        {DAYS.map((d, i) => (
-          <button key={i} onClick={() => setDayIndex(i)} style={{
-            borderRadius: "4px", padding: "4px 12px", fontSize: "12px", flexShrink: 0,
-            fontFamily: "'Oswald', sans-serif", letterSpacing: "0.05em",
-            background: i === dayIndex ? COLORS.accent : "transparent",
-            color: i === dayIndex ? COLORS.bg : COLORS.textMuted,
-            border: `1px solid ${i === dayIndex ? COLORS.accent : COLORS.border}`,
-          }}>{d.name.toUpperCase()}</button>
-        ))}
-      </div>
-
-      {day.exercises.map((ex, i) => (
-        <ExerciseCard key={ex.id + i} exercise={ex} prevLog={findPreviousLog(data.sessions, date, ex.id)}
-          current={draft[i].sets} savedStatus={savedStatuses[ex.id]}
-          setValue={(setIdx, field, value) => setValue(i, setIdx, field, value)} />
-      ))}
-
-      <button onClick={handleSave} style={{
-        width: "100%", borderRadius: "8px", padding: "12px", marginTop: "8px",
-        background: COLORS.accent, color: COLORS.bg, fontFamily: "'Oswald', sans-serif",
-        fontSize: "15px", letterSpacing: "0.08em", fontWeight: 600, border: "none",
-      }}>SALVAR TREINO DO DIA</button>
-    </div>
-  );
+  return /*#__PURE__*/_jsxDEV("div", {
+    style: {
+      padding: "16px",
+      paddingBottom: "96px"
+    },
+    children: [/*#__PURE__*/_jsxDEV("div", {
+      style: {
+        marginBottom: "16px"
+      },
+      children: [/*#__PURE__*/_jsxDEV("div", {
+        style: {
+          color: COLORS.textMuted,
+          fontSize: "12px",
+          fontFamily: "'IBM Plex Mono', monospace"
+        },
+        children: date.split("-").reverse().join("/")
+      }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
+        style: {
+          fontFamily: "'Oswald', sans-serif",
+          color: COLORS.text,
+          fontSize: "32px",
+          letterSpacing: "0.01em",
+          lineHeight: 1
+        },
+        children: day.name.toUpperCase()
+      }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
+        style: {
+          color: COLORS.accent,
+          fontSize: "13px"
+        },
+        children: day.label
+      }, void 0, false)]
+    }, void 0, true), /*#__PURE__*/_jsxDEV("div", {
+      style: {
+        display: "flex",
+        gap: "8px",
+        marginBottom: "16px",
+        overflowX: "auto"
+      },
+      children: DAYS.map((d, i) => /*#__PURE__*/_jsxDEV("button", {
+        onClick: () => setDayIndex(i),
+        style: {
+          borderRadius: "4px",
+          padding: "4px 12px",
+          fontSize: "12px",
+          flexShrink: 0,
+          fontFamily: "'Oswald', sans-serif",
+          letterSpacing: "0.05em",
+          background: i === dayIndex ? COLORS.accent : "transparent",
+          color: i === dayIndex ? COLORS.bg : COLORS.textMuted,
+          border: `1px solid ${i === dayIndex ? COLORS.accent : COLORS.border}`
+        },
+        children: d.name.toUpperCase()
+      }, i, false))
+    }, void 0, false), day.exercises.map((ex, i) => /*#__PURE__*/_jsxDEV(ExerciseCard, {
+      exercise: ex,
+      prevLog: findPreviousLog(data.sessions, date, ex.id),
+      current: draft[i].sets,
+      savedStatus: savedStatuses[ex.id],
+      setValue: (setIdx, field, value) => setValue(i, setIdx, field, value)
+    }, ex.id + i, false)), /*#__PURE__*/_jsxDEV("button", {
+      onClick: handleSave,
+      style: {
+        width: "100%",
+        borderRadius: "8px",
+        padding: "12px",
+        marginTop: "8px",
+        background: COLORS.accent,
+        color: COLORS.bg,
+        fontFamily: "'Oswald', sans-serif",
+        fontSize: "15px",
+        letterSpacing: "0.08em",
+        fontWeight: 600,
+        border: "none"
+      },
+      children: "SALVAR TREINO DO DIA"
+    }, void 0, false)]
+  }, void 0, true);
 }
-
-function Sparkline({ points, color }) {
+function Sparkline({
+  points,
+  color
+}) {
   if (points.length < 2) return null;
-  const w = 320, h = 140, pad = 12;
-  const values = points.map((p) => p.weight);
-  const min = Math.min(...values), max = Math.max(...values);
+  const w = 320,
+    h = 140,
+    pad = 12;
+  const values = points.map(p => p.weight);
+  const min = Math.min(...values),
+    max = Math.max(...values);
   const range = max - min || 1;
   const stepX = (w - pad * 2) / (points.length - 1);
   const coords = points.map((p, i) => {
     const x = pad + i * stepX;
-    const y = h - pad - ((p.weight - min) / range) * (h - pad * 2);
+    const y = h - pad - (p.weight - min) / range * (h - pad * 2);
     return `${x},${y}`;
   });
-  return (
-    <svg viewBox={`0 0 ${w} ${h}`} style={{ width: "100%", height: "160px" }}>
-      <polyline points={coords.join(" ")} fill="none" stroke={color} strokeWidth="2" />
-      {coords.map((c, i) => {
-        const [x, y] = c.split(",");
-        return <circle key={i} cx={x} cy={y} r="2.5" fill={color} />;
-      })}
-    </svg>
-  );
+  return /*#__PURE__*/_jsxDEV("svg", {
+    viewBox: `0 0 ${w} ${h}`,
+    style: {
+      width: "100%",
+      height: "160px"
+    },
+    children: [/*#__PURE__*/_jsxDEV("polyline", {
+      points: coords.join(" "),
+      fill: "none",
+      stroke: color,
+      strokeWidth: "2"
+    }, void 0, false), coords.map((c, i) => {
+      const [x, y] = c.split(",");
+      return /*#__PURE__*/_jsxDEV("circle", {
+        cx: x,
+        cy: y,
+        r: "2.5",
+        fill: color
+      }, i, false);
+    })]
+  }, void 0, true);
 }
-
-function ProgressoTab({ data, persist }) {
+function ProgressoTab({
+  data,
+  persist
+}) {
   const [weight, setWeight] = useState("");
-  const sorted = useMemo(() => [...data.bodyweight].sort((a, b) => (a.date < b.date ? -1 : 1)), [data.bodyweight]);
-
+  const sorted = useMemo(() => [...data.bodyweight].sort((a, b) => a.date < b.date ? -1 : 1), [data.bodyweight]);
   const addWeight = () => {
     if (!weight) return;
     const date = todayISO();
-    const filtered = data.bodyweight.filter((e) => e.date !== date);
-    const next = [...filtered, { date, weight: Number(weight) }];
-    persist({ ...data, bodyweight: next });
+    const filtered = data.bodyweight.filter(e => e.date !== date);
+    const next = [...filtered, {
+      date,
+      weight: Number(weight)
+    }];
+    persist({
+      ...data,
+      bodyweight: next
+    });
     setWeight("");
   };
-
   const latest = sorted[sorted.length - 1];
   const startWeight = sorted[0];
-
-  return (
-    <div style={{ padding: "16px", paddingBottom: "96px" }}>
-      <div style={{ fontFamily: "'Oswald', sans-serif", color: COLORS.text, fontSize: "28px", marginBottom: "16px" }}>PROGRESSO</div>
-
-      <div style={{ borderRadius: "8px", padding: "12px", marginBottom: "16px", display: "flex", alignItems: "center", gap: "12px", background: COLORS.surface, border: `1px solid ${COLORS.border}` }}>
-        <input type="number" inputMode="decimal" placeholder="peso hoje (kg)" value={weight} onChange={(e) => setWeight(e.target.value)}
-          style={{ borderRadius: "4px", padding: "8px 12px", flex: 1, fontSize: "14px", background: COLORS.surfaceAlt, border: `1px solid ${COLORS.border}`, color: COLORS.text, fontFamily: "'IBM Plex Mono', monospace" }} />
-        <button onClick={addWeight} style={{ borderRadius: "4px", padding: "8px 16px", fontSize: "14px", background: COLORS.accent, color: COLORS.bg, fontFamily: "'Oswald', sans-serif", letterSpacing: "0.05em", border: "none" }}>REGISTRAR</button>
-      </div>
-
-      {latest && startWeight && (
-        <div style={{ display: "flex", gap: "16px", marginBottom: "16px" }}>
-          <div>
-            <div style={{ color: COLORS.textMuted, fontSize: "11px" }}>ATUAL</div>
-            <div style={{ fontFamily: "'IBM Plex Mono', monospace", color: COLORS.text, fontSize: "22px" }}>{latest.weight}kg</div>
-          </div>
-          <div>
-            <div style={{ color: COLORS.textMuted, fontSize: "11px" }}>VARIAÇÃO NO PERÍODO</div>
-            <div style={{ fontFamily: "'IBM Plex Mono', monospace", color: latest.weight <= startWeight.weight ? COLORS.good : COLORS.bad, fontSize: "22px" }}>
-              {(latest.weight - startWeight.weight).toFixed(1)}kg
-            </div>
-          </div>
-        </div>
-      )}
-
-      {sorted.length > 1 ? (
-        <div style={{ background: COLORS.surface, border: `1px solid ${COLORS.border}`, borderRadius: "8px", padding: "8px" }}>
-          <Sparkline points={sorted} color={COLORS.accent} />
-        </div>
-      ) : (
-        <div style={{ color: COLORS.textMuted, fontSize: "13px" }}>
-          Registre seu peso por alguns dias para ver a tendência aqui. Uma medição isolada não diz nada — o que importa é a curva.
-        </div>
-      )}
-    </div>
-  );
+  return /*#__PURE__*/_jsxDEV("div", {
+    style: {
+      padding: "16px",
+      paddingBottom: "96px"
+    },
+    children: [/*#__PURE__*/_jsxDEV("div", {
+      style: {
+        fontFamily: "'Oswald', sans-serif",
+        color: COLORS.text,
+        fontSize: "28px",
+        marginBottom: "16px"
+      },
+      children: "PROGRESSO"
+    }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
+      style: {
+        borderRadius: "8px",
+        padding: "12px",
+        marginBottom: "16px",
+        display: "flex",
+        alignItems: "center",
+        gap: "12px",
+        background: COLORS.surface,
+        border: `1px solid ${COLORS.border}`
+      },
+      children: [/*#__PURE__*/_jsxDEV("input", {
+        type: "number",
+        inputMode: "decimal",
+        placeholder: "peso hoje (kg)",
+        value: weight,
+        onChange: e => setWeight(e.target.value),
+        style: {
+          borderRadius: "4px",
+          padding: "8px 12px",
+          flex: 1,
+          fontSize: "14px",
+          background: COLORS.surfaceAlt,
+          border: `1px solid ${COLORS.border}`,
+          color: COLORS.text,
+          fontFamily: "'IBM Plex Mono', monospace"
+        }
+      }, void 0, false), /*#__PURE__*/_jsxDEV("button", {
+        onClick: addWeight,
+        style: {
+          borderRadius: "4px",
+          padding: "8px 16px",
+          fontSize: "14px",
+          background: COLORS.accent,
+          color: COLORS.bg,
+          fontFamily: "'Oswald', sans-serif",
+          letterSpacing: "0.05em",
+          border: "none"
+        },
+        children: "REGISTRAR"
+      }, void 0, false)]
+    }, void 0, true), latest && startWeight && /*#__PURE__*/_jsxDEV("div", {
+      style: {
+        display: "flex",
+        gap: "16px",
+        marginBottom: "16px"
+      },
+      children: [/*#__PURE__*/_jsxDEV("div", {
+        children: [/*#__PURE__*/_jsxDEV("div", {
+          style: {
+            color: COLORS.textMuted,
+            fontSize: "11px"
+          },
+          children: "ATUAL"
+        }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
+          style: {
+            fontFamily: "'IBM Plex Mono', monospace",
+            color: COLORS.text,
+            fontSize: "22px"
+          },
+          children: [latest.weight, "kg"]
+        }, void 0, true)]
+      }, void 0, true), /*#__PURE__*/_jsxDEV("div", {
+        children: [/*#__PURE__*/_jsxDEV("div", {
+          style: {
+            color: COLORS.textMuted,
+            fontSize: "11px"
+          },
+          children: "VARIAÇÃO NO PERÍODO"
+        }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
+          style: {
+            fontFamily: "'IBM Plex Mono', monospace",
+            color: latest.weight <= startWeight.weight ? COLORS.good : COLORS.bad,
+            fontSize: "22px"
+          },
+          children: [(latest.weight - startWeight.weight).toFixed(1), "kg"]
+        }, void 0, true)]
+      }, void 0, true)]
+    }, void 0, true), sorted.length > 1 ? /*#__PURE__*/_jsxDEV("div", {
+      style: {
+        background: COLORS.surface,
+        border: `1px solid ${COLORS.border}`,
+        borderRadius: "8px",
+        padding: "8px"
+      },
+      children: /*#__PURE__*/_jsxDEV(Sparkline, {
+        points: sorted,
+        color: COLORS.accent
+      }, void 0, false)
+    }, void 0, false) : /*#__PURE__*/_jsxDEV("div", {
+      style: {
+        color: COLORS.textMuted,
+        fontSize: "13px"
+      },
+      children: "Registre seu peso por alguns dias para ver a tendência aqui. Uma medição isolada não diz nada — o que importa é a curva."
+    }, void 0, false)]
+  }, void 0, true);
 }
-
-function daysAgoISO(n) { const d = new Date(); d.setDate(d.getDate() - n); return d.toISOString().slice(0, 10); }
-
+function daysAgoISO(n) {
+  const d = new Date();
+  d.setDate(d.getDate() - n);
+  return d.toISOString().slice(0, 10);
+}
 function buildWeeklyReview(data) {
   const since = daysAgoISO(6);
-  const weekDates = Object.keys(data.sessions).filter((d) => d >= since).sort();
-  const sessions = weekDates.map((d) => data.sessions[d]);
-
+  const weekDates = Object.keys(data.sessions).filter(d => d >= since).sort();
+  const sessions = weekDates.map(d => data.sessions[d]);
   const exerciseStatus = {};
-  sessions.forEach((s) => s.exercises.forEach((ex) => { if (ex.status) exerciseStatus[ex.name] = ex.status; }));
-
+  sessions.forEach(s => s.exercises.forEach(ex => {
+    if (ex.status) exerciseStatus[ex.name] = ex.status;
+  }));
   const progressed = Object.entries(exerciseStatus).filter(([, s]) => s === "progrediu" || s === "nova_carga");
   const maintained = Object.entries(exerciseStatus).filter(([, s]) => s === "manteve");
   const regressed = Object.entries(exerciseStatus).filter(([, s]) => s === "regrediu" || s === "carga_reduzida");
-
-  const weekWeights = data.bodyweight.filter((e) => e.date >= since).sort((a, b) => (a.date < b.date ? -1 : 1));
-  const prevWeekWeights = data.bodyweight.filter((e) => e.date >= daysAgoISO(13) && e.date < since).sort((a, b) => (a.date < b.date ? -1 : 1));
-  const avg = (arr) => (arr.length ? arr.reduce((a, e) => a + e.weight, 0) / arr.length : null);
-  const weekAvg = avg(weekWeights), prevAvg = avg(prevWeekWeights);
+  const weekWeights = data.bodyweight.filter(e => e.date >= since).sort((a, b) => a.date < b.date ? -1 : 1);
+  const prevWeekWeights = data.bodyweight.filter(e => e.date >= daysAgoISO(13) && e.date < since).sort((a, b) => a.date < b.date ? -1 : 1);
+  const avg = arr => arr.length ? arr.reduce((a, e) => a + e.weight, 0) / arr.length : null;
+  const weekAvg = avg(weekWeights),
+    prevAvg = avg(prevWeekWeights);
   const weightDelta = weekAvg !== null && prevAvg !== null ? weekAvg - prevAvg : null;
-
   let mainWin, mainIssue;
-  if (progressed.length > 0) mainWin = `Progressão em ${progressed.map(([n]) => n).join(", ")}.`;
-  else if (sessions.length > 0) mainWin = "Consistência: treinos concluídos dentro da semana.";
-  else mainWin = "Nenhum treino registrado ainda essa semana.";
-
-  if (regressed.length > 0) mainIssue = `Queda de desempenho em ${regressed.map(([n]) => n).join(", ")}.`;
-  else if (maintained.length >= 2) mainIssue = `Estagnação em ${maintained.map(([n]) => n).join(", ")}.`;
-  else if (sessions.length < 4) mainIssue = `Frequência baixa: apenas ${sessions.length} de 6 treinos concluídos.`;
-  else mainIssue = "Nenhum problema relevante identificado.";
-
+  if (progressed.length > 0) mainWin = `Progressão em ${progressed.map(([n]) => n).join(", ")}.`;else if (sessions.length > 0) mainWin = "Consistência: treinos concluídos dentro da semana.";else mainWin = "Nenhum treino registrado ainda essa semana.";
+  if (regressed.length > 0) mainIssue = `Queda de desempenho em ${regressed.map(([n]) => n).join(", ")}.`;else if (maintained.length >= 2) mainIssue = `Estagnação em ${maintained.map(([n]) => n).join(", ")}.`;else if (sessions.length < 4) mainIssue = `Frequência baixa: apenas ${sessions.length} de 6 treinos concluídos.`;else mainIssue = "Nenhum problema relevante identificado.";
   const actions = [];
   if (regressed.length > 0) actions.push(`Investigar recuperação (sono, volume, técnica) em: ${regressed.map(([n]) => n).join(", ")}.`);
   if (maintained.length > 0) actions.push(`Tentar superar o desempenho anterior ou revisar execução em: ${maintained.map(([n]) => n).join(", ")}.`);
@@ -420,144 +806,419 @@ function buildWeeklyReview(data) {
     actions.push("Registrar peso corporal com mais frequência para conseguir enxergar tendência real.");
   }
   if (progressed.length > 0 && regressed.length === 0) actions.push("O que está funcionando, continuar sem mudar por vaidade.");
-
-  return { since, sessionsCount: sessions.length, progressed, maintained, regressed, weekAvg, weightDelta, mainWin, mainIssue, actions: actions.slice(0, 5) };
+  return {
+    since,
+    sessionsCount: sessions.length,
+    progressed,
+    maintained,
+    regressed,
+    weekAvg,
+    weightDelta,
+    mainWin,
+    mainIssue,
+    actions: actions.slice(0, 5)
+  };
 }
-
-function ReviewTab({ data }) {
+function ReviewTab({
+  data
+}) {
   const [review, setReview] = useState(null);
-  return (
-    <div style={{ padding: "16px", paddingBottom: "96px" }}>
-      <div style={{ fontFamily: "'Oswald', sans-serif", color: COLORS.text, fontSize: "28px", marginBottom: "4px" }}>REVISÃO SEMANAL</div>
-      <div style={{ color: COLORS.textMuted, fontSize: "12px", marginBottom: "16px" }}>Últimos 7 dias, comparado à semana anterior.</div>
-
-      <button onClick={() => setReview(buildWeeklyReview(data))} style={{
-        width: "100%", borderRadius: "8px", padding: "12px", marginBottom: "16px",
-        background: COLORS.accent, color: COLORS.bg, fontFamily: "'Oswald', sans-serif",
-        fontSize: "14px", letterSpacing: "0.06em", fontWeight: 600, border: "none",
-      }}>GERAR REVISÃO</button>
-
-      {review && (
-        <div style={{ display: "grid", gap: "12px" }}>
-          <div style={{ borderRadius: "8px", padding: "12px", background: COLORS.surface, border: `1px solid ${COLORS.border}` }}>
-            <div style={{ fontFamily: "'Oswald', sans-serif", color: COLORS.accent, fontSize: "13px", letterSpacing: "0.06em", marginBottom: "6px" }}>TREINO</div>
-            <div style={{ color: COLORS.text, fontSize: "13px", fontFamily: "'IBM Plex Mono', monospace" }}>{review.sessionsCount} de 6 treinos concluídos</div>
-            {review.progressed.length > 0 && <div style={{ color: COLORS.good, fontSize: "12px", marginTop: "4px" }}>Progrediu: {review.progressed.map(([n]) => n).join(", ")}</div>}
-            {review.maintained.length > 0 && <div style={{ color: COLORS.neutral, fontSize: "12px", marginTop: "4px" }}>Manteve: {review.maintained.map(([n]) => n).join(", ")}</div>}
-            {review.regressed.length > 0 && <div style={{ color: COLORS.bad, fontSize: "12px", marginTop: "4px" }}>Regrediu: {review.regressed.map(([n]) => n).join(", ")}</div>}
-          </div>
-
-          <div style={{ borderRadius: "8px", padding: "12px", background: COLORS.surface, border: `1px solid ${COLORS.border}` }}>
-            <div style={{ fontFamily: "'Oswald', sans-serif", color: COLORS.accent, fontSize: "13px", letterSpacing: "0.06em", marginBottom: "6px" }}>COMPOSIÇÃO CORPORAL</div>
-            <div style={{ color: COLORS.text, fontSize: "13px", fontFamily: "'IBM Plex Mono', monospace" }}>
-              {review.weekAvg !== null ? `Média da semana: ${review.weekAvg.toFixed(1)}kg` : "Sem registros de peso nessa semana"}
-            </div>
-            {review.weightDelta !== null && (
-              <div style={{ color: review.weightDelta <= 0 ? COLORS.good : COLORS.bad, fontSize: "12px", marginTop: "4px" }}>
-                Variação vs. semana anterior: {review.weightDelta > 0 ? "+" : ""}{review.weightDelta.toFixed(1)}kg
-              </div>
-            )}
-          </div>
-
-          <div style={{ borderRadius: "8px", padding: "12px", background: COLORS.surface, border: `1px solid ${COLORS.border}` }}>
-            <div style={{ fontFamily: "'Oswald', sans-serif", color: COLORS.accent, fontSize: "13px", letterSpacing: "0.06em", marginBottom: "6px" }}>DIAGNÓSTICO</div>
-            <div style={{ color: COLORS.text, fontSize: "13px", marginBottom: "4px" }}><span style={{ color: COLORS.good }}>Avanço:</span> {review.mainWin}</div>
-            <div style={{ color: COLORS.text, fontSize: "13px" }}><span style={{ color: COLORS.bad }}>Problema:</span> {review.mainIssue}</div>
-          </div>
-
-          <div style={{ borderRadius: "8px", padding: "12px", background: COLORS.surface, border: `1px solid ${COLORS.border}` }}>
-            <div style={{ fontFamily: "'Oswald', sans-serif", color: COLORS.accent, fontSize: "13px", letterSpacing: "0.06em", marginBottom: "6px" }}>PRÓXIMA SEMANA</div>
-            <ul style={{ color: COLORS.text, fontSize: "13px", paddingLeft: "16px", margin: 0 }}>
-              {review.actions.map((a, i) => <li key={i} style={{ marginBottom: "6px" }}>{a}</li>)}
-            </ul>
-          </div>
-        </div>
-      )}
-    </div>
-  );
+  return /*#__PURE__*/_jsxDEV("div", {
+    style: {
+      padding: "16px",
+      paddingBottom: "96px"
+    },
+    children: [/*#__PURE__*/_jsxDEV("div", {
+      style: {
+        fontFamily: "'Oswald', sans-serif",
+        color: COLORS.text,
+        fontSize: "28px",
+        marginBottom: "4px"
+      },
+      children: "REVISÃO SEMANAL"
+    }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
+      style: {
+        color: COLORS.textMuted,
+        fontSize: "12px",
+        marginBottom: "16px"
+      },
+      children: "Últimos 7 dias, comparado à semana anterior."
+    }, void 0, false), /*#__PURE__*/_jsxDEV("button", {
+      onClick: () => setReview(buildWeeklyReview(data)),
+      style: {
+        width: "100%",
+        borderRadius: "8px",
+        padding: "12px",
+        marginBottom: "16px",
+        background: COLORS.accent,
+        color: COLORS.bg,
+        fontFamily: "'Oswald', sans-serif",
+        fontSize: "14px",
+        letterSpacing: "0.06em",
+        fontWeight: 600,
+        border: "none"
+      },
+      children: "GERAR REVISÃO"
+    }, void 0, false), review && /*#__PURE__*/_jsxDEV("div", {
+      style: {
+        display: "grid",
+        gap: "12px"
+      },
+      children: [/*#__PURE__*/_jsxDEV("div", {
+        style: {
+          borderRadius: "8px",
+          padding: "12px",
+          background: COLORS.surface,
+          border: `1px solid ${COLORS.border}`
+        },
+        children: [/*#__PURE__*/_jsxDEV("div", {
+          style: {
+            fontFamily: "'Oswald', sans-serif",
+            color: COLORS.accent,
+            fontSize: "13px",
+            letterSpacing: "0.06em",
+            marginBottom: "6px"
+          },
+          children: "TREINO"
+        }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
+          style: {
+            color: COLORS.text,
+            fontSize: "13px",
+            fontFamily: "'IBM Plex Mono', monospace"
+          },
+          children: [review.sessionsCount, " de 6 treinos concluídos"]
+        }, void 0, true), review.progressed.length > 0 && /*#__PURE__*/_jsxDEV("div", {
+          style: {
+            color: COLORS.good,
+            fontSize: "12px",
+            marginTop: "4px"
+          },
+          children: ["Progrediu: ", review.progressed.map(([n]) => n).join(", ")]
+        }, void 0, true), review.maintained.length > 0 && /*#__PURE__*/_jsxDEV("div", {
+          style: {
+            color: COLORS.neutral,
+            fontSize: "12px",
+            marginTop: "4px"
+          },
+          children: ["Manteve: ", review.maintained.map(([n]) => n).join(", ")]
+        }, void 0, true), review.regressed.length > 0 && /*#__PURE__*/_jsxDEV("div", {
+          style: {
+            color: COLORS.bad,
+            fontSize: "12px",
+            marginTop: "4px"
+          },
+          children: ["Regrediu: ", review.regressed.map(([n]) => n).join(", ")]
+        }, void 0, true)]
+      }, void 0, true), /*#__PURE__*/_jsxDEV("div", {
+        style: {
+          borderRadius: "8px",
+          padding: "12px",
+          background: COLORS.surface,
+          border: `1px solid ${COLORS.border}`
+        },
+        children: [/*#__PURE__*/_jsxDEV("div", {
+          style: {
+            fontFamily: "'Oswald', sans-serif",
+            color: COLORS.accent,
+            fontSize: "13px",
+            letterSpacing: "0.06em",
+            marginBottom: "6px"
+          },
+          children: "COMPOSIÇÃO CORPORAL"
+        }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
+          style: {
+            color: COLORS.text,
+            fontSize: "13px",
+            fontFamily: "'IBM Plex Mono', monospace"
+          },
+          children: review.weekAvg !== null ? `Média da semana: ${review.weekAvg.toFixed(1)}kg` : "Sem registros de peso nessa semana"
+        }, void 0, false), review.weightDelta !== null && /*#__PURE__*/_jsxDEV("div", {
+          style: {
+            color: review.weightDelta <= 0 ? COLORS.good : COLORS.bad,
+            fontSize: "12px",
+            marginTop: "4px"
+          },
+          children: ["Variação vs. semana anterior: ", review.weightDelta > 0 ? "+" : "", review.weightDelta.toFixed(1), "kg"]
+        }, void 0, true)]
+      }, void 0, true), /*#__PURE__*/_jsxDEV("div", {
+        style: {
+          borderRadius: "8px",
+          padding: "12px",
+          background: COLORS.surface,
+          border: `1px solid ${COLORS.border}`
+        },
+        children: [/*#__PURE__*/_jsxDEV("div", {
+          style: {
+            fontFamily: "'Oswald', sans-serif",
+            color: COLORS.accent,
+            fontSize: "13px",
+            letterSpacing: "0.06em",
+            marginBottom: "6px"
+          },
+          children: "DIAGNÓSTICO"
+        }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
+          style: {
+            color: COLORS.text,
+            fontSize: "13px",
+            marginBottom: "4px"
+          },
+          children: [/*#__PURE__*/_jsxDEV("span", {
+            style: {
+              color: COLORS.good
+            },
+            children: "Avanço:"
+          }, void 0, false), " ", review.mainWin]
+        }, void 0, true), /*#__PURE__*/_jsxDEV("div", {
+          style: {
+            color: COLORS.text,
+            fontSize: "13px"
+          },
+          children: [/*#__PURE__*/_jsxDEV("span", {
+            style: {
+              color: COLORS.bad
+            },
+            children: "Problema:"
+          }, void 0, false), " ", review.mainIssue]
+        }, void 0, true)]
+      }, void 0, true), /*#__PURE__*/_jsxDEV("div", {
+        style: {
+          borderRadius: "8px",
+          padding: "12px",
+          background: COLORS.surface,
+          border: `1px solid ${COLORS.border}`
+        },
+        children: [/*#__PURE__*/_jsxDEV("div", {
+          style: {
+            fontFamily: "'Oswald', sans-serif",
+            color: COLORS.accent,
+            fontSize: "13px",
+            letterSpacing: "0.06em",
+            marginBottom: "6px"
+          },
+          children: "PRÓXIMA SEMANA"
+        }, void 0, false), /*#__PURE__*/_jsxDEV("ul", {
+          style: {
+            color: COLORS.text,
+            fontSize: "13px",
+            paddingLeft: "16px",
+            margin: 0
+          },
+          children: review.actions.map((a, i) => /*#__PURE__*/_jsxDEV("li", {
+            style: {
+              marginBottom: "6px"
+            },
+            children: a
+          }, i, false))
+        }, void 0, false)]
+      }, void 0, true)]
+    }, void 0, true)]
+  }, void 0, true);
 }
-
-function HistoricoTab({ data }) {
+function HistoricoTab({
+  data
+}) {
   const dates = Object.keys(data.sessions).sort().reverse();
   const [expanded, setExpanded] = useState(null);
-  return (
-    <div style={{ padding: "16px", paddingBottom: "96px" }}>
-      <div style={{ fontFamily: "'Oswald', sans-serif", color: COLORS.text, fontSize: "28px", marginBottom: "16px" }}>HISTÓRICO</div>
-      {dates.length === 0 && <div style={{ color: COLORS.textMuted, fontSize: "13px" }}>Nenhum treino registrado ainda.</div>}
-      {dates.map((d) => {
-        const s = data.sessions[d];
-        const isOpen = expanded === d;
-        return (
-          <div key={d} style={{ borderRadius: "8px", marginBottom: "8px", overflow: "hidden", background: COLORS.surface, border: `1px solid ${COLORS.border}` }}>
-            <button onClick={() => setExpanded(isOpen ? null : d)} style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px", background: "transparent", border: "none", cursor: "pointer" }}>
-              <div style={{ textAlign: "left" }}>
-                <div style={{ fontFamily: "'Oswald', sans-serif", color: COLORS.text, fontSize: "15px" }}>{s.dayName.toUpperCase()}</div>
-                <div style={{ color: COLORS.textMuted, fontSize: "11px" }}>{fmtDate(d)} · {s.exercises.length} exercícios</div>
-              </div>
-              <span style={{ color: COLORS.textMuted }}>{isOpen ? "−" : "+"}</span>
-            </button>
-            {isOpen && (
-              <div style={{ padding: "0 12px 12px" }}>
-                {s.exercises.map((ex) => (
-                  <div key={ex.id} style={{ marginBottom: "8px" }}>
-                    <div style={{ color: COLORS.text, fontSize: "13px" }}>{ex.name}</div>
-                    <div style={{ color: COLORS.textMuted, fontSize: "12px", fontFamily: "'IBM Plex Mono', monospace" }}>
-                      {ex.sets.map((set) => `${set.weight || 0}kg×${set.reps || 0} (RIR ${set.rir})`).join(" · ")}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        );
-      })}
-    </div>
-  );
+  return /*#__PURE__*/_jsxDEV("div", {
+    style: {
+      padding: "16px",
+      paddingBottom: "96px"
+    },
+    children: [/*#__PURE__*/_jsxDEV("div", {
+      style: {
+        fontFamily: "'Oswald', sans-serif",
+        color: COLORS.text,
+        fontSize: "28px",
+        marginBottom: "16px"
+      },
+      children: "HISTÓRICO"
+    }, void 0, false), dates.length === 0 && /*#__PURE__*/_jsxDEV("div", {
+      style: {
+        color: COLORS.textMuted,
+        fontSize: "13px"
+      },
+      children: "Nenhum treino registrado ainda."
+    }, void 0, false), dates.map(d => {
+      const s = data.sessions[d];
+      const isOpen = expanded === d;
+      return /*#__PURE__*/_jsxDEV("div", {
+        style: {
+          borderRadius: "8px",
+          marginBottom: "8px",
+          overflow: "hidden",
+          background: COLORS.surface,
+          border: `1px solid ${COLORS.border}`
+        },
+        children: [/*#__PURE__*/_jsxDEV("button", {
+          onClick: () => setExpanded(isOpen ? null : d),
+          style: {
+            width: "100%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            padding: "12px",
+            background: "transparent",
+            border: "none",
+            cursor: "pointer"
+          },
+          children: [/*#__PURE__*/_jsxDEV("div", {
+            style: {
+              textAlign: "left"
+            },
+            children: [/*#__PURE__*/_jsxDEV("div", {
+              style: {
+                fontFamily: "'Oswald', sans-serif",
+                color: COLORS.text,
+                fontSize: "15px"
+              },
+              children: s.dayName.toUpperCase()
+            }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
+              style: {
+                color: COLORS.textMuted,
+                fontSize: "11px"
+              },
+              children: [fmtDate(d), " · ", s.exercises.length, " exercícios"]
+            }, void 0, true)]
+          }, void 0, true), /*#__PURE__*/_jsxDEV("span", {
+            style: {
+              color: COLORS.textMuted
+            },
+            children: isOpen ? "−" : "+"
+          }, void 0, false)]
+        }, void 0, true), isOpen && /*#__PURE__*/_jsxDEV("div", {
+          style: {
+            padding: "0 12px 12px"
+          },
+          children: s.exercises.map(ex => /*#__PURE__*/_jsxDEV("div", {
+            style: {
+              marginBottom: "8px"
+            },
+            children: [/*#__PURE__*/_jsxDEV("div", {
+              style: {
+                color: COLORS.text,
+                fontSize: "13px"
+              },
+              children: ex.name
+            }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
+              style: {
+                color: COLORS.textMuted,
+                fontSize: "12px",
+                fontFamily: "'IBM Plex Mono', monospace"
+              },
+              children: ex.sets.map(set => `${set.weight || 0}kg×${set.reps || 0} (RIR ${set.rir})`).join(" · ")
+            }, void 0, false)]
+          }, ex.id, true))
+        }, void 0, false)]
+      }, d, true);
+    })]
+  }, void 0, true);
 }
-
 function ConselhoSilva() {
-  const { data, persist } = useAppData();
+  const {
+    data,
+    persist
+  } = useAppData();
   const [tab, setTab] = useState("treino");
-
   if (!data) {
-    return <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: COLORS.bg, color: COLORS.textMuted, fontFamily: "'IBM Plex Mono', monospace" }}>carregando...</div>;
+    return /*#__PURE__*/_jsxDEV("div", {
+      style: {
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        background: COLORS.bg,
+        color: COLORS.textMuted,
+        fontFamily: "'IBM Plex Mono', monospace"
+      },
+      children: "carregando..."
+    }, void 0, false);
   }
-
-  const TABS = [
-    { id: "treino", label: "Treino" },
-    { id: "progresso", label: "Progresso" },
-    { id: "revisao", label: "Revisão" },
-    { id: "historico", label: "Histórico" },
-  ];
-
-  return (
-    <div style={{ minHeight: "100vh", background: COLORS.bg }}>
-      <div style={{ padding: "12px 16px", display: "flex", alignItems: "center", justifyContent: "space-between", borderBottom: `1px solid ${COLORS.border}` }}>
-        <div style={{ fontFamily: "'Oswald', sans-serif", color: COLORS.accent, fontSize: "14px", letterSpacing: "0.1em" }}>CONSELHO SILVA</div>
-        <div style={{ color: COLORS.textMuted, fontSize: "11px", fontFamily: "'IBM Plex Mono', monospace" }}>DE PERFORMANCE</div>
-      </div>
-
-      {tab === "treino" && <TreinoTab data={data} persist={persist} />}
-      {tab === "progresso" && <ProgressoTab data={data} persist={persist} />}
-      {tab === "revisao" && <ReviewTab data={data} />}
-      {tab === "historico" && <HistoricoTab data={data} />}
-
-      <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, display: "flex", background: COLORS.surface, borderTop: `1px solid ${COLORS.border}` }}>
-        {TABS.map((t) => (
-          <button key={t.id} onClick={() => setTab(t.id)} style={{
-            flex: 1, padding: "12px 0", textAlign: "center", background: "transparent", cursor: "pointer",
-            fontFamily: "'Oswald', sans-serif", fontSize: "12px", letterSpacing: "0.08em",
-            color: tab === t.id ? COLORS.accent : COLORS.textMuted,
-            borderTop: tab === t.id ? `2px solid ${COLORS.accent}` : "2px solid transparent", border: "none",
-            borderTopWidth: "2px", borderTopStyle: "solid", borderTopColor: tab === t.id ? COLORS.accent : "transparent",
-          }}>{t.label.toUpperCase()}</button>
-        ))}
-      </div>
-    </div>
-  );
+  const TABS = [{
+    id: "treino",
+    label: "Treino"
+  }, {
+    id: "progresso",
+    label: "Progresso"
+  }, {
+    id: "revisao",
+    label: "Revisão"
+  }, {
+    id: "historico",
+    label: "Histórico"
+  }];
+  return /*#__PURE__*/_jsxDEV("div", {
+    style: {
+      minHeight: "100vh",
+      background: COLORS.bg
+    },
+    children: [/*#__PURE__*/_jsxDEV("div", {
+      style: {
+        padding: "12px 16px",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+        borderBottom: `1px solid ${COLORS.border}`
+      },
+      children: [/*#__PURE__*/_jsxDEV("div", {
+        style: {
+          fontFamily: "'Oswald', sans-serif",
+          color: COLORS.accent,
+          fontSize: "14px",
+          letterSpacing: "0.1em"
+        },
+        children: "CONSELHO SILVA"
+      }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
+        style: {
+          color: COLORS.textMuted,
+          fontSize: "11px",
+          fontFamily: "'IBM Plex Mono', monospace"
+        },
+        children: "DE PERFORMANCE"
+      }, void 0, false)]
+    }, void 0, true), tab === "treino" && /*#__PURE__*/_jsxDEV(TreinoTab, {
+      data: data,
+      persist: persist
+    }, void 0, false), tab === "progresso" && /*#__PURE__*/_jsxDEV(ProgressoTab, {
+      data: data,
+      persist: persist
+    }, void 0, false), tab === "revisao" && /*#__PURE__*/_jsxDEV(ReviewTab, {
+      data: data
+    }, void 0, false), tab === "historico" && /*#__PURE__*/_jsxDEV(HistoricoTab, {
+      data: data
+    }, void 0, false), /*#__PURE__*/_jsxDEV("div", {
+      style: {
+        position: "fixed",
+        bottom: 0,
+        left: 0,
+        right: 0,
+        display: "flex",
+        background: COLORS.surface,
+        borderTop: `1px solid ${COLORS.border}`
+      },
+      children: TABS.map(t => /*#__PURE__*/_jsxDEV("button", {
+        onClick: () => setTab(t.id),
+        style: {
+          flex: 1,
+          padding: "12px 0",
+          textAlign: "center",
+          background: "transparent",
+          cursor: "pointer",
+          fontFamily: "'Oswald', sans-serif",
+          fontSize: "12px",
+          letterSpacing: "0.08em",
+          color: tab === t.id ? COLORS.accent : COLORS.textMuted,
+          borderTop: tab === t.id ? `2px solid ${COLORS.accent}` : "2px solid transparent",
+          border: "none",
+          borderTopWidth: "2px",
+          borderTopStyle: "solid",
+          borderTopColor: tab === t.id ? COLORS.accent : "transparent"
+        },
+        children: t.label.toUpperCase()
+      }, t.id, false))
+    }, void 0, false)]
+  }, void 0, true);
 }
-
-ReactDOM.createRoot(document.getElementById("root")).render(<ConselhoSilva />);
+ReactDOM.createRoot(document.getElementById("root")).render(/*#__PURE__*/_jsxDEV(ConselhoSilva, {}, void 0, false));
 </script>
 
 <script>
