@@ -1,4 +1,4 @@
-const CACHE_NAME = "conselho-silva-v1";
+const CACHE_NAME = "conselho-silva-v2";
 const ASSETS = [
   "./",
   "./index.html",
@@ -24,11 +24,13 @@ self.addEventListener("activate", (event) => {
 });
 
 self.addEventListener("fetch", (event) => {
+  // Ignora requisições que não sejam HTTP/HTTPS (ex: extensões chrome-extension://)
+  if (!event.request.url.startsWith("http")) return;
+
   event.respondWith(
     caches.match(event.request).then((cached) => {
       if (cached) return cached;
       return fetch(event.request).then((response) => {
-        // cache successful GET responses for next offline load
         if (event.request.method === "GET" && response.ok) {
           const clone = response.clone();
           caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
