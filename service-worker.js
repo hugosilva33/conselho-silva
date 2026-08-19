@@ -24,13 +24,16 @@ self.addEventListener("activate", (event) => {
 });
 
 self.addEventListener("fetch", (event) => {
-  self.addEventListener('fetch', (event) => {
-  const url = new URL(event.request.url);
-  if (!url.protocol.startsWith('http')) {
-    return; // Ignora esquemas como chrome-extension://
-  }
-  // Restante da sua lógica de cache...
-});;
+  // Se não for HTTP/HTTPS, ignora e deixa o navegador tratar
+  if (!event.request.url.startsWith("http")) return;
+
+  event.respondWith(
+    caches.match(event.request).then((cached) => {
+      if (cached) return cached;
+      return fetch(event.request).then((response) => {
+        if (event.request.method === "GET" && response.ok) {
+          const clone = response.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
         }
         return response;
       }).catch(() => cached);
